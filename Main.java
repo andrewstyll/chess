@@ -2,8 +2,8 @@ import java.util.*;
 import javax.swing.*;
 
 public class Main {
-    static int SCREEN_WIDTH = 512;
-    static int SCREEN_HEIGHT = 512;
+    static int SCREEN_WIDTH = 550;
+    static int SCREEN_HEIGHT = 550;
 
     public static void main(String[] args) {
         JFrame window = new JFrame("ChessBot-1");

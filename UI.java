@@ -4,6 +4,8 @@ import javax.swing.*;
 
 public class UI extends JPanel implements MouseListener, MouseMotionListener {
     
+    static int squareWidth = 64;
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g); //allows for partial painting of a canvas
         this.setBackground(Color.LIGHT_GRAY);
@@ -11,7 +13,17 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
         this.addMouseMotionListener(this);
 
         //now paint the squares
-       
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
+                if((i+j)%2 == 0) {
+                    g.setColor(Color.BLACK);
+                    g.fillRect(i*squareWidth, j*squareWidth, squareWidth, squareWidth);
+                } else {
+                    g.setColor(Color.WHITE);
+                    g.fillRect(i*squareWidth, j*squareWidth, squareWidth, squareWidth);
+                }
+            }
+        }
     }
 
     public void mouseMoved(MouseEvent e) {}
