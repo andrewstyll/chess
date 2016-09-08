@@ -16,12 +16,11 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
                 if((i+j)%2 == 0) {
-                    g.setColor(Color.BLACK);
-                    g.fillRect(i*squareWidth, j*squareWidth, squareWidth, squareWidth);
+                    g.setColor(new Color(255, 248, 220));
                 } else {
-                    g.setColor(Color.WHITE);
-                    g.fillRect(i*squareWidth, j*squareWidth, squareWidth, squareWidth);
+                    g.setColor(new Color(139, 69, 19));
                 }
+                g.fillRect(i*squareWidth+20, j*squareWidth+18, squareWidth, squareWidth);
             }
         }
     }
