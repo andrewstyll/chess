@@ -7,7 +7,7 @@ public class Board {
     static long wRook = 0l, bRook = 0l;
     static long wQueen = 0l, bQueen = 0l;
     static long wKing = 0l, bKing = 0l;
-    static HashMap<Character, Piece> pieces; //hashmap only uses reference types
+    static HashMap<Character, Piece> pieces = new HashMap<Character, Piece>();
 
     //WHITE IS THE CAPITALISED ONES
     static char charBoard[][] = {
@@ -30,7 +30,6 @@ public class Board {
     }
 
     static void initPieces() {
-        pieces = new HashMap<Character, Piece>();
         pieces.put('p', new Pawn(Piece.Side.BLACK));
         pieces.put('r', new Rook(Piece.Side.BLACK));
         pieces.put('k', new Knight(Piece.Side.BLACK));
@@ -55,55 +54,58 @@ public class Board {
                     tmpPiece.addLocation(powerOf2((i-63)*-1));
                     break;
                 case 'p':
-                    tmpPiece = pieces.get('P');
+                    tmpPiece = pieces.get('p');
                     tmpPiece.addLocation(powerOf2((i-63)*-1));
                     break;
                 case 'K': 
-                    tmpPiece = pieces.get('P');
+                    tmpPiece = pieces.get('K');
                     tmpPiece.addLocation(powerOf2((i-63)*-1));
                     break;
                 case 'k': 
-                    tmpPiece = pieces.get('P');
+                    tmpPiece = pieces.get('k');
                     tmpPiece.addLocation(powerOf2((i-63)*-1));
                     break;
                 case 'B': 
-                    tmpPiece = pieces.get('P');
+                    tmpPiece = pieces.get('B');
                     tmpPiece.addLocation(powerOf2((i-63)*-1));
                     break;
                 case 'b': 
-                    tmpPiece = pieces.get('P');
+                    tmpPiece = pieces.get('b');
                     tmpPiece.addLocation(powerOf2((i-63)*-1));
                     break;
                 case 'R': 
-                    tmpPiece = pieces.get('P');
+                    tmpPiece = pieces.get('R');
                     tmpPiece.addLocation(powerOf2((i-63)*-1));
-                    System.out.println(tmpPiece.getLocation());
                     break;
                 case 'r': 
-                    tmpPiece = pieces.get('P');
+                    tmpPiece = pieces.get('r');
                     tmpPiece.addLocation(powerOf2((i-63)*-1));
+                    System.out.println((i-63)*-1);
+                    System.out.println(Long.toBinaryString(powerOf2((i-63)*-1)));
+                    System.out.println(powerOf2((i-63)*-1));
                     break;
                 case 'Q': 
-                    tmpPiece = pieces.get('P');
+                    tmpPiece = pieces.get('Q');
                     tmpPiece.addLocation(powerOf2((i-63)*-1));
                     break;
                 case 'q': 
-                    tmpPiece = pieces.get('P');
+                    tmpPiece = pieces.get('q');
                     tmpPiece.addLocation(powerOf2((i-63)*-1));
                     break;
                 case 'A': 
-                    tmpPiece = pieces.get('P');
+                    tmpPiece = pieces.get('A');
                     tmpPiece.addLocation(powerOf2((i-63)*-1));
                     break;
                 case 'a': 
-                    tmpPiece = pieces.get('P');
+                    tmpPiece = pieces.get('a');
                     tmpPiece.addLocation(powerOf2((i-63)*-1));
                     break;
             }   
         }
     }
 
-    static long powerOf2(int i) {
-        return (1 << i);
+    static long powerOf2(long i) {
+        long base = 1;
+        return (base << i);
     }
 }
