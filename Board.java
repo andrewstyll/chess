@@ -11,7 +11,7 @@ public class Board {
 
     //WHITE IS THE CAPITALISED ONES
     static char charBoard[][] = {
-        {'r', 'k', 'b', 'q', 'a', 'k', 'k', 'r'},
+        {'r', 'k', 'b', 'q', 'a', 'b', 'k', 'r'},
         {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -25,8 +25,6 @@ public class Board {
         
         initPieces();
         charBoardToBitBoard();
-        //charBoardToBitBoard(charBoard, wPawn, bPawn, wKnight, bKnight, wBishop, bBishop, wRook, bRook, wQueen, bQueen, wKing, bKing);
-        
     }
 
     static void initPieces() {
@@ -80,9 +78,6 @@ public class Board {
                 case 'r': 
                     tmpPiece = pieces.get('r');
                     tmpPiece.addLocation(powerOf2((i-63)*-1));
-                    System.out.println((i-63)*-1);
-                    System.out.println(Long.toBinaryString(powerOf2((i-63)*-1)));
-                    System.out.println(powerOf2((i-63)*-1));
                     break;
                 case 'Q': 
                     tmpPiece = pieces.get('Q');
