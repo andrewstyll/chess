@@ -1,3 +1,5 @@
+package pieceDef;
+
 public abstract class Piece {
     public enum Side{BLACK, WHITE};
 

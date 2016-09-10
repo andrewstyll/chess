@@ -1,4 +1,5 @@
 import java.util.*;
+import pieceDef.*;
 
 public class Board {
     static long wPawn = 0l, bPawn = 0l;
@@ -99,7 +100,7 @@ public class Board {
         }
     }
 
-    static long powerOf2(long i) {
+    static long powerOf2(int i) {
         long base = 1;
         return (base << i);
     }

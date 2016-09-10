@@ -1,6 +1,8 @@
+package pieceDef;
+
 public class Queen extends Piece {
 
-    Queen(Side s) {
+    public Queen(Side s) {
         location = 0L;
         team = s;
         isAlive = true;
