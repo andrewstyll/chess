@@ -2,13 +2,12 @@ import java.util.*;
 import pieceDef.*;
 
 public class Board {
-    static long wPawn = 0l, bPawn = 0l;
-    static long wKnight = 0l, bKnight = 0l;
-    static long wBishop = 0l, bBishop = 0l;
-    static long wRook = 0l, bRook = 0l;
-    static long wQueen = 0l, bQueen = 0l;
-    static long wKing = 0l, bKing = 0l;
     static HashMap<Character, Piece> pieces = new HashMap<Character, Piece>();
+
+    static long lSide = -9187201950435737472L;
+    static long rSide = 72340172838076673L;
+    static long topRow = 255L;
+    static long bottomRow = -72057594037927936L;
 
     //WHITE IS THE CAPITALISED ONES
     static char charBoard[][] = {
@@ -22,10 +21,37 @@ public class Board {
         {'R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R'},
     };
 
-    public static void initBoard() {
+    
+
+    public static String possibleMovesWhite() {
+        String history = "";
+        String moves = "";
+
+        long piecesB = getBlackPosition();
+        long piecesW = getWhitePosition();
+
+        moves += pieces.get('P').getMovesW(history, piecesB, piecesW, lSide, rSide, topRow);
         
+        System.out.println(moves);
+        return ""; 
+    }
+    
+    static long getBlackPosition() {
+        long gBP = (pieces.get('p').getLocation() | pieces.get('r').getLocation() | pieces.get('k').getLocation() | 
+                    pieces.get('b').getLocation() | pieces.get('q').getLocation() | pieces.get('a').getLocation());
+        return gBP;
+    }
+
+    static long getWhitePosition() {
+        long gWP = (pieces.get('P').getLocation() | pieces.get('R').getLocation() | pieces.get('K').getLocation() | 
+                    pieces.get('B').getLocation() | pieces.get('Q').getLocation() | pieces.get('A').getLocation());
+        return gWP;
+    }
+    
+    public static void initBoard() {
         initPieces();
         charBoardToBitBoard();
+        possibleMovesWhite();
     }
 
     static void initPieces() {
@@ -50,51 +76,51 @@ public class Board {
             switch(charBoard[i/8][i%8]) {
                 case 'P':
                     tmpPiece = pieces.get('P');
-                    tmpPiece.addLocation(powerOf2((i-63)*-1));
+                    tmpPiece.addLocation(powerOf2(i));
                     break;
                 case 'p':
                     tmpPiece = pieces.get('p');
-                    tmpPiece.addLocation(powerOf2((i-63)*-1));
+                    tmpPiece.addLocation(powerOf2(i));
                     break;
                 case 'K': 
                     tmpPiece = pieces.get('K');
-                    tmpPiece.addLocation(powerOf2((i-63)*-1));
+                    tmpPiece.addLocation(powerOf2(i));
                     break;
                 case 'k': 
                     tmpPiece = pieces.get('k');
-                    tmpPiece.addLocation(powerOf2((i-63)*-1));
+                    tmpPiece.addLocation(powerOf2(i));
                     break;
                 case 'B': 
                     tmpPiece = pieces.get('B');
-                    tmpPiece.addLocation(powerOf2((i-63)*-1));
+                    tmpPiece.addLocation(powerOf2(i));
                     break;
                 case 'b': 
                     tmpPiece = pieces.get('b');
-                    tmpPiece.addLocation(powerOf2((i-63)*-1));
+                    tmpPiece.addLocation(powerOf2(i));
                     break;
-                case 'R': 
+                case 'R':
                     tmpPiece = pieces.get('R');
-                    tmpPiece.addLocation(powerOf2((i-63)*-1));
+                    tmpPiece.addLocation(powerOf2(i));
                     break;
                 case 'r': 
                     tmpPiece = pieces.get('r');
-                    tmpPiece.addLocation(powerOf2((i-63)*-1));
+                    tmpPiece.addLocation(powerOf2(i));
                     break;
                 case 'Q': 
                     tmpPiece = pieces.get('Q');
-                    tmpPiece.addLocation(powerOf2((i-63)*-1));
+                    tmpPiece.addLocation(powerOf2(i));
                     break;
                 case 'q': 
                     tmpPiece = pieces.get('q');
-                    tmpPiece.addLocation(powerOf2((i-63)*-1));
+                    tmpPiece.addLocation(powerOf2(i));
                     break;
                 case 'A': 
                     tmpPiece = pieces.get('A');
-                    tmpPiece.addLocation(powerOf2((i-63)*-1));
+                    tmpPiece.addLocation(powerOf2(i));
                     break;
                 case 'a': 
                     tmpPiece = pieces.get('a');
-                    tmpPiece.addLocation(powerOf2((i-63)*-1));
+                    tmpPiece.addLocation(powerOf2(i));
                     break;
             }   
         }

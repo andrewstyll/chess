@@ -21,4 +21,6 @@ public abstract class Piece {
     public boolean getAlive() {
         return isAlive;
     }
+
+    public abstract String getMovesW(String h, long a, long b, long c, long d, long e);
 }
