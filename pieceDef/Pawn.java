@@ -13,20 +13,26 @@ public class Pawn extends Piece {
     //y1 x1 y2 x2
     public String getMovesW(String history, long piecesB, long piecesW, long lSide, long rSide, long promo) {
         
+        long twoHop = 1095216660480L; 
+        long allPieces = piecesB | piecesW;
 
         String moves = "";
         //move up
-        long uBoard = (location>>8) &~ piecesB &~ piecesW &~ forwards;
+        //long uBoard = (location>>8) &~ piecesB &~ piecesW &~ promo;
+        long uBoard = (location>>8) &~ allPieces &~ promo;
         //move up 2
-        long u2Board = (location>>16) &~ 
+        long u2Board = (location>>16) & twoHop &~ allPieces &~ (allPieces>>8);
         //capture right
-        long cRBoard = (location>>7) & piecesB &~ rSide &~ forwards;
+        long cRBoard = (location>>7) & piecesB &~ rSide &~ promo;
         //capture left
-        long cLBoard = (location>>9) & piecesB &~ lSide &~ forwards;
+        long cLBoard = (location>>9) & piecesB &~ lSide &~ promo;
 
         for(int i = 0; i < 64; i++) {
             if(((uBoard>>i) & 1) == 1) { //if this is a one, we've found a move
                 moves += "" + (i/8+1) + (i%8) + (i/8) + (i%8) + " ";  
+            }
+            if(((u2Board>>i) & 1) == 1) { //if this is a one, we've found a move
+                moves += "" + (i/8+2) + (i%8) + (i/8) + (i%8) + " ";  
             }
             if(((cRBoard>>i) & 1) == 1) { //if this is a one, we've found a move
                 moves += "" + (i/8+1) + (i%8-1) + (i/8) + (i%8) + " ";  
