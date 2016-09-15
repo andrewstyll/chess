@@ -1,8 +1,12 @@
 package pieceDef;
-import java.util.Arrays;
 
 public abstract class Piece {
     public enum Side{BLACK, WHITE};
+    
+    static long lSide = -9187201950435737472L;
+    static long rSide = 72340172838076673L;
+    static long topRow = 255L;
+    static long bottomRow = -72057594037927936L;
 
     //keep in mind, should match the system used by the board
     protected long[] verticalMask = {
@@ -75,9 +79,8 @@ public abstract class Piece {
         right = Long.reverse(Long.reverse(occupied&antiDiagonalMask[index/8 - index%8 + 7]) - 2*Long.reverse(slider));
         antiDiag = left^right;
     
-        drawBitBoard((diag&diagonalMask[index%8 + index/8])|(antiDiag&antiDiagonalMask[index/8 - index%8 + 7]));    
         return (diag&diagonalMask[index%8 + index/8])|(antiDiag&antiDiagonalMask[index/8 - index%8 + 7]);
     }
 
-    public abstract String getMovesW(String h, long a, long b, long c, long d, long e);
+    public abstract String getMoves(long a, long b);
 }

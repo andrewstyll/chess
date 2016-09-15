@@ -4,18 +4,14 @@ import pieceDef.*;
 public class Board {
     static HashMap<Character, Piece> pieces = new HashMap<Character, Piece>();
 
-    static long lSide = -9187201950435737472L;
-    static long rSide = 72340172838076673L;
-    static long topRow = 255L;
-    static long bottomRow = -72057594037927936L;
 
     //WHITE IS THE CAPITALISED ONES
     static char charBoard[][] = {
         {'r', 'k', 'b', 'q', 'a', 'b', 'k', 'r'},
         {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-        {' ', ' ', ' ', 'p', ' ', ' ', ' ', ' '},
-        {' ', ' ', ' ', ' ', 'Q', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
         {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
         {'R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R'},
@@ -31,7 +27,7 @@ public class Board {
         
         //pieces.get('P').verticalHorizontalHQ(tmp, 36);
         pieces.get('P').diagonalAntiDiagonalHQ(tmp, 36);
-        //moves += pieces.get('P').getMovesW(history, piecesB, piecesW, lSide, rSide, topRow);
+        moves += pieces.get('P').getMoves(piecesB, piecesW);
         
         //System.out.println(moves);
         return ""; 

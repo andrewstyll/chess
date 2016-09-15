@@ -7,7 +7,7 @@ public class Bishop extends Piece {
         team = s;
         isAlive = true;
     }
-    public String getMovesW(String history, long piecesB, long piecesW, long lSide, long rSide, long forwards) {
+    public String getMoves(long piecesB, long piecesW) {
         return "";
     }
 }
