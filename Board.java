@@ -25,10 +25,10 @@ public class Board {
         long piecesW = getWhitePosition();
         long tmp = piecesB|piecesW;
         
-        //pieces.get('P').verticalHorizontalHQ(tmp, 36);
-        pieces.get('P').diagonalAntiDiagonalHQ(tmp, 36);
-        //moves += pieces.get('P').getMoves(piecesB, piecesW);
+        moves += pieces.get('P').getMoves(piecesB, piecesW);
         moves += pieces.get('R').getMoves(piecesB, piecesW);
+        moves += pieces.get('B').getMoves(piecesB, piecesW);
+        moves += pieces.get('Q').getMoves(piecesB, piecesW);
         
         System.out.println(moves);
         return ""; 
