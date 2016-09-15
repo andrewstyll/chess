@@ -27,9 +27,10 @@ public class Board {
         
         //pieces.get('P').verticalHorizontalHQ(tmp, 36);
         pieces.get('P').diagonalAntiDiagonalHQ(tmp, 36);
-        moves += pieces.get('P').getMoves(piecesB, piecesW);
+        //moves += pieces.get('P').getMoves(piecesB, piecesW);
+        moves += pieces.get('R').getMoves(piecesB, piecesW);
         
-        //System.out.println(moves);
+        System.out.println(moves);
         return ""; 
     }
     

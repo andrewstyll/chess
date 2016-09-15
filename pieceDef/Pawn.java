@@ -18,7 +18,6 @@ public class Pawn extends Piece {
 
         String moves = "";
         //move up
-        //long uBoard = (location>>8) &~ piecesB &~ piecesW &~ promo;
         long uBoard = (location>>8) &~ allPieces &~ topRow;
         //move up 2
         long u2Board = (location>>16) & twoHop &~ allPieces &~ (allPieces>>8);

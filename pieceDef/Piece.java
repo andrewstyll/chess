@@ -2,11 +2,16 @@ package pieceDef;
 
 public abstract class Piece {
     public enum Side{BLACK, WHITE};
-    
+   
+    //these are the same for every piece
     static long lSide = -9187201950435737472L;
     static long rSide = 72340172838076673L;
     static long topRow = 255L;
     static long bottomRow = -72057594037927936L;
+
+    protected long location;
+    protected Side team;
+    protected boolean isAlive;
 
     //keep in mind, should match the system used by the board
     protected long[] verticalMask = {
@@ -27,10 +32,6 @@ public abstract class Piece {
         0x8040201008040201L, 0x4020100804020100L, 0x2010080402010000L, 0x1008040201000000L, 
         0x804020100000000L, 0x402010000000000L, 0x201000000000000L, 0x100000000000000L
     };
-
-    protected long location;
-    protected Side team;
-    protected boolean isAlive;
 
     public long getLocation() {
         return location;
