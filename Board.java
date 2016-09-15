@@ -14,25 +14,26 @@ public class Board {
         {'r', 'k', 'b', 'q', 'a', 'b', 'k', 'r'},
         {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', 'p', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', 'Q', ' ', ' ', ' '},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
         {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
         {'R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R'},
     };
-
     
-
     public static String possibleMovesWhite() {
         String history = "";
         String moves = "";
 
         long piecesB = getBlackPosition();
         long piecesW = getWhitePosition();
-
-        moves += pieces.get('P').getMovesW(history, piecesB, piecesW, lSide, rSide, topRow);
+        long tmp = piecesB|piecesW;
         
-        System.out.println(moves);
+        //pieces.get('P').verticalHorizontalHQ(tmp, 36);
+        pieces.get('P').diagonalAntiDiagonalHQ(tmp, 36);
+        //moves += pieces.get('P').getMovesW(history, piecesB, piecesW, lSide, rSide, topRow);
+        
+        //System.out.println(moves);
         return ""; 
     }
     
