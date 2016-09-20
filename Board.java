@@ -27,9 +27,10 @@ public class Board {
         
         //moves += pieces.get('P').getMoves(piecesB, piecesW);
         //moves += pieces.get('R').getMoves(piecesB, piecesW);
-        moves += pieces.get('K').getMoves(piecesB, piecesW);
+        //moves += pieces.get('K').getMoves(piecesB, piecesW);
         //moves += pieces.get('B').getMoves(piecesB, piecesW);
         //moves += pieces.get('Q').getMoves(piecesB, piecesW);
+        moves += pieces.get('A').getMoves(piecesB, piecesW);
         
         System.out.println(moves);
         return ""; 

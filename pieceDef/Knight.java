@@ -1,5 +1,4 @@
 package pieceDef;
-import java.util.Arrays;
 
 public class Knight extends Piece {
 
@@ -9,21 +8,6 @@ public class Knight extends Piece {
         isAlive = true;
     }
     
-    public void drawBoard(long num) {
-        char board[][] = new char[8][8];
-
-        for(int i = 0; i<64; i++) {
-            if(((num>>i) & 1) == 1) {
-                board[i/8][i%8] = 'K';
-            } else {
-                board[i/8][i%8] = ' ';
-            }
-        }
-        for(int i = 0; i < 8; i++) {
-            System.out.println(Arrays.toString(board[i]));
-        }
-    }
-
     private long kMoves(long i) {
         
         long NE = 0L, SE = 0L, NW = 0L, SW = 0L;
@@ -68,8 +52,6 @@ public class Knight extends Piece {
                 } else {
                     knightMoves = knightMoves &~ piecesB;
                 }
-                drawBoard(knightMoves);
-                System.out.println(i%8);
                 for(int j = 0; j < 64; j++) {
                     if (((knightMoves>>j) & 1) == 1) { //we have found a knight move!!
                         moves += "" + (i/8) + (i%8) + (j/8) + (j%8) + " ";
