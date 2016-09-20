@@ -7,6 +7,7 @@ public class Pawn extends Piece {
         location = 0L;
         team = s;
         isAlive = true;
+        potentialCaptures = 0L;
     }
 
     //i need my location, I need where the enemy pieces are, and where the spaces ard where the edges of the
@@ -16,6 +17,7 @@ public class Pawn extends Piece {
         
         long twoHop = 1095216660480L; 
         long allPieces = piecesB | piecesW;
+        this.potentialCaptures = 0L;
 
         String moves = "";
         //move up
@@ -42,6 +44,8 @@ public class Pawn extends Piece {
             }
         }
         
+        this.potentialCaptures |= cRBoard | cLBoard;
+
         //again with promotions
         uBoard = (location>>8) &~ piecesB &~ piecesW & topRow;
         cRBoard = (location>>7) & piecesB &~ lSide & topRow;
@@ -60,6 +64,8 @@ public class Pawn extends Piece {
             }
         }
 
+        this.potentialCaptures |= cRBoard | cLBoard;
+        
         return moves;   
     }
 }

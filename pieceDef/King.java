@@ -9,21 +9,7 @@ public class King extends Piece {
         location = 0L;
         team = s;
         isAlive = true;
-    }
-
-    public void drawBoard(long num) {
-        char board[][] = new char[8][8];
-
-        for(int i = 0; i<64; i++) {
-            if(((num>>i) & 1) == 1) {
-                board[i/8][i%8] = 'K';
-            } else {
-                board[i/8][i%8] = ' ';
-            }
-        }
-        for(int i = 0; i < 8; i++) {
-            System.out.println(Arrays.toString(board[i]));
-        }
+        potentialCaptures = 0L;
     }
 
     private long kMoves(long i) {
@@ -50,6 +36,7 @@ public class King extends Piece {
         
         String moves = "";
         long allPieces = piecesB | piecesW;
+        this.potentialCaptures = 0L;
 
         for(int i = 0; i < 64; i++) { //look through the location for every location on board for the king
             long kingMoves = 0L;
@@ -59,11 +46,11 @@ public class King extends Piece {
 
                 if(this.team == Side.WHITE) {
                     kingMoves = kingMoves &~ piecesW;
+                    this.potentialCaptures |= kingMoves & piecesB;
                 } else {
                     kingMoves = kingMoves &~ piecesB;
+                    this.potentialCaptures |= kingMoves & piecesW;
                 }
-                drawBoard(kingMoves);
-                System.out.println("");
                 for(int j = 0; j < 64; j++) {
                     if (((kingMoves>>j) & 1) == 1) { //we have found a king move!!
                         moves += "" + (i/8) + (i%8) + (j/8) + (j%8) + " ";

@@ -12,6 +12,7 @@ public abstract class Piece {
     protected long location;
     protected Side team;
     protected boolean isAlive;
+    protected long potentialCaptures;
 
     //keep in mind, should match the system used by the board
     private long[] verticalMask = {
@@ -81,6 +82,10 @@ public abstract class Piece {
 
     public boolean getAlive() {
         return isAlive;
+    }
+
+    public long getCaptures() {
+        return potentialCaptures;
     }
 
     public abstract String getMoves(long a, long b);

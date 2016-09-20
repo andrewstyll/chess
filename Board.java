@@ -12,11 +12,12 @@ public class Board {
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {'p', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
         {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
         {'R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R'},
     };
     
+    //must get moves to update captures as captures are determined by potential moves
     public static String possibleMovesWhite() {
         String history = "";
         String moves = "";
@@ -25,17 +26,30 @@ public class Board {
         long piecesW = getWhitePosition();
         long tmp = piecesB|piecesW;
         
-        //moves += pieces.get('P').getMoves(piecesB, piecesW);
-        //moves += pieces.get('R').getMoves(piecesB, piecesW);
-        //moves += pieces.get('K').getMoves(piecesB, piecesW);
-        //moves += pieces.get('B').getMoves(piecesB, piecesW);
-        //moves += pieces.get('Q').getMoves(piecesB, piecesW);
+        moves += pieces.get('P').getMoves(piecesB, piecesW);
+        moves += pieces.get('R').getMoves(piecesB, piecesW);
+        moves += pieces.get('K').getMoves(piecesB, piecesW);
+        moves += pieces.get('B').getMoves(piecesB, piecesW);
+        moves += pieces.get('Q').getMoves(piecesB, piecesW);
         moves += pieces.get('A').getMoves(piecesB, piecesW);
-        
+
+        drawBoard(getWhiteCaptures());
+
         System.out.println(moves);
         return ""; 
     }
     
+    static long getBlackCaptures() {
+        long gBC = (pieces.get('p').getCaptures() | pieces.get('r').getCaptures() | pieces.get('k').getCaptures() | 
+                    pieces.get('b').getCaptures() | pieces.get('q').getCaptures() | pieces.get('a').getCaptures());
+        return gBC;
+    }
+    static long getWhiteCaptures() {
+        long gWC = (pieces.get('P').getCaptures() | pieces.get('R').getCaptures() | pieces.get('K').getCaptures() | 
+                    pieces.get('B').getCaptures() | pieces.get('Q').getCaptures() | pieces.get('A').getCaptures());
+        return gWC;
+    }
+
     static long getBlackPosition() {
         long gBP = (pieces.get('p').getLocation() | pieces.get('r').getLocation() | pieces.get('k').getLocation() | 
                     pieces.get('b').getLocation() | pieces.get('q').getLocation() | pieces.get('a').getLocation());
@@ -130,4 +144,20 @@ public class Board {
         long base = 1L;
         return (base << i);
     }
+    
+    static void drawBoard(long num) {
+        char board[][] = new char[8][8];
+
+        for(int i = 0; i<64; i++) {
+            if(((num>>i) & 1) == 1) {
+                board[i/8][i%8] = 'K';
+            } else {
+                board[i/8][i%8] = ' ';
+            }
+        }
+        for(int i = 0; i < 8; i++) {
+            System.out.println(Arrays.toString(board[i]));
+        }
+    }
+
 }

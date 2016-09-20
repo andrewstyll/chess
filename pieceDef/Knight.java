@@ -6,6 +6,7 @@ public class Knight extends Piece {
         location = 0L;
         team = s;
         isAlive = true;
+        potentialCaptures = 0L;
     }
     
     private long kMoves(long i) {
@@ -40,6 +41,7 @@ public class Knight extends Piece {
         
         String moves = "";
         long allPieces = piecesB | piecesW;
+        this.potentialCaptures = 0L;
 
         for(int i = 0; i < 64; i++) { //look through the location for every location on board for the knight
             long knightMoves = 0L;
@@ -49,8 +51,10 @@ public class Knight extends Piece {
 
                 if(this.team == Side.WHITE) {
                     knightMoves = knightMoves &~ piecesW;
+                    this.potentialCaptures |= knightMoves & piecesB;
                 } else {
                     knightMoves = knightMoves &~ piecesB;
+                    this.potentialCaptures |= knightMoves & piecesW;
                 }
                 for(int j = 0; j < 64; j++) {
                     if (((knightMoves>>j) & 1) == 1) { //we have found a knight move!!
