@@ -25,10 +25,11 @@ public class Board {
         long piecesW = getWhitePosition();
         long tmp = piecesB|piecesW;
         
-        moves += pieces.get('P').getMoves(piecesB, piecesW);
-        moves += pieces.get('R').getMoves(piecesB, piecesW);
-        moves += pieces.get('B').getMoves(piecesB, piecesW);
-        moves += pieces.get('Q').getMoves(piecesB, piecesW);
+        //moves += pieces.get('P').getMoves(piecesB, piecesW);
+        //moves += pieces.get('R').getMoves(piecesB, piecesW);
+        moves += pieces.get('K').getMoves(piecesB, piecesW);
+        //moves += pieces.get('B').getMoves(piecesB, piecesW);
+        //moves += pieces.get('Q').getMoves(piecesB, piecesW);
         
         System.out.println(moves);
         return ""; 
@@ -125,7 +126,7 @@ public class Board {
     }
 
     static long powerOf2(int i) {
-        long base = 1;
+        long base = 1L;
         return (base << i);
     }
 }

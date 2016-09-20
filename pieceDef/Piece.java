@@ -4,8 +4,8 @@ public abstract class Piece {
     public enum Side{BLACK, WHITE};
    
     //these are the same for every piece
-    protected long lSide = -9187201950435737472L;
-    protected long rSide = 72340172838076673L;
+    protected long rSide = -9187201950435737472L;
+    protected long lSide = 72340172838076673L;
     protected long topRow = 255L;
     protected long bottomRow = -72057594037927936L;
 
@@ -54,7 +54,7 @@ public abstract class Piece {
     protected long diagonalAntiDiagonalHQ(long occupied, int index) {
         long left, right, diag, antiDiag;
 
-        long base = 1;
+        long base = 1L;
         long slider = base << index;
 
         left = (occupied&diagonalMask[index%8 + index/8]) - 2*slider; 

@@ -17,7 +17,11 @@ public class Bishop extends Piece {
             long bishopMoves = 0L;
             if (((location>>i) & 1) == 1) { //we have found a rook!
                 bishopMoves = diagonalAntiDiagonalHQ(allPieces, i); //contains the location of the rook moves
-                
+                if(this.team == Side.WHITE) {
+                    bishopMoves = bishopMoves &~ piecesW;
+                } else {
+                    bishopMoves = bishopMoves &~ piecesB;
+                }
                 for(int j = 0; j < 64; j++) {
                     if (((bishopMoves>>j) & 1) == 1) { //we have found a rook move!!
                         moves += "" + (i/8) + (i%8) + (j/8) + (j%8) + " ";
