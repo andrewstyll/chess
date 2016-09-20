@@ -46,11 +46,10 @@ public class King extends Piece {
 
                 if(this.team == Side.WHITE) {
                     kingMoves = kingMoves &~ piecesW;
-                    this.potentialCaptures |= kingMoves & piecesB;
                 } else {
                     kingMoves = kingMoves &~ piecesB;
-                    this.potentialCaptures |= kingMoves & piecesW;
                 }
+                this.potentialCaptures |= kingMoves;
                 for(int j = 0; j < 64; j++) {
                     if (((kingMoves>>j) & 1) == 1) { //we have found a king move!!
                         moves += "" + (i/8) + (i%8) + (j/8) + (j%8) + " ";

@@ -15,19 +15,34 @@ public class Pawn extends Piece {
     //y1 x1 y2 x2
     public String getMoves(long piecesB, long piecesW) {
         
-        long twoHop = 1095216660480L; 
+        long twoHopW = 1095216660480L; 
+        long twoHopB = 4278190080L; 
+        long uBoard = 0L, u2Board = 0L, cRBoard = 0L, cLBoard = 0L;
+        
         long allPieces = piecesB | piecesW;
         this.potentialCaptures = 0L;
 
         String moves = "";
-        //move up
-        long uBoard = (location>>8) &~ allPieces &~ topRow;
-        //move up 2
-        long u2Board = (location>>16) & twoHop &~ allPieces &~ (allPieces>>8);
-        //capture right
-        long cRBoard = (location>>7) & piecesB &~ lSide &~ topRow;
-        //capture left
-        long cLBoard = (location>>9) & piecesB &~ rSide &~ topRow;
+        
+        if(this.team == Side.WHITE) {
+            //move up
+            uBoard = (location>>8) &~ allPieces &~ topRow;
+            //move up 2
+            u2Board = (location>>16) & twoHopW &~ allPieces &~ (allPieces>>8);
+            //capture right
+            cRBoard = (location>>7) & piecesB &~ lSide &~ topRow;
+            //capture left
+            cLBoard = (location>>9) & piecesB &~ rSide &~ topRow;
+        } else {
+            //move up
+            uBoard = (location<<8) &~ allPieces &~ bottomRow;
+            //move up 2
+            u2Board = (location<<16) & twoHopB &~ allPieces &~ (allPieces<<8);
+            //capture right
+            cRBoard = (location<<9) & piecesW &~ lSide &~ bottomRow;
+            //capture left
+            cLBoard = (location<<7) & piecesW &~ rSide &~ bottomRow;
+        }
 
         for(int i = 0; i < 64; i++) {
             if(((uBoard>>i) & 1) == 1) { //if this is a one, we've found a move
@@ -43,14 +58,17 @@ public class Pawn extends Piece {
                 moves += "" + (i/8+1) + (i%8+1) + (i/8) + (i%8) + " ";  
             }
         }
-        
-        this.potentialCaptures |= cRBoard | cLBoard;
 
         //again with promotions
-        uBoard = (location>>8) &~ piecesB &~ piecesW & topRow;
-        cRBoard = (location>>7) & piecesB &~ lSide & topRow;
-        cLBoard = (location>>9) & piecesB &~ rSide & topRow;
-        
+        if(this.team == Side.WHITE) {
+            uBoard = (location>>8) &~ piecesB &~ piecesW & topRow;
+            cRBoard = (location>>7) & piecesB &~ lSide & topRow;
+            cLBoard = (location>>9) & piecesB &~ rSide & topRow;
+        } else {
+            uBoard = (location<<8) &~ piecesW &~ piecesW & bottomRow;
+            cRBoard = (location<<9) & piecesW &~ lSide & bottomRow;
+            cLBoard = (location<<7) & piecesW &~ rSide & bottomRow;
+        }
         //x1 x2
         for(int i = 0; i < 64; i++) {
             if(((uBoard>>i) & 1) == 1) { //if this is a one, we've found a move
@@ -64,6 +82,14 @@ public class Pawn extends Piece {
             }
         }
 
+        //update captures
+        if(this.team == Side.WHITE) {
+            cLBoard = (location>>9) &~ rSide;
+            cRBoard = (location>>7) &~ lSide;
+        } else {
+            cRBoard = (location<<9) &~ lSide;
+            cLBoard = (location<<7) &~ rSide;
+        }
         this.potentialCaptures |= cRBoard | cLBoard;
         
         return moves;   

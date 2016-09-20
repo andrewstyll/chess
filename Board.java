@@ -12,8 +12,8 @@ public class Board {
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-        {'p', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-        {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {'P', 'P', 'P', 'P', ' ', 'P', 'P', 'P'},
         {'R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R'},
     };
     
@@ -35,18 +35,23 @@ public class Board {
 
         drawBoard(getWhiteCaptures());
 
+        if ((getWhiteCaptures() & pieces.get('k').getLocation()) != 0L) {
+            //king is in check
+            System.out.println("king is caught!");
+        }
         System.out.println(moves);
         return ""; 
     }
     
+    //all places on board where a piece can be captured (use to check king check status)
     static long getBlackCaptures() {
-        long gBC = (pieces.get('p').getCaptures() | pieces.get('r').getCaptures() | pieces.get('k').getCaptures() | 
-                    pieces.get('b').getCaptures() | pieces.get('q').getCaptures() | pieces.get('a').getCaptures());
+        long gBC = (pieces.get('p').getPCaptures() | pieces.get('r').getPCaptures() | pieces.get('k').getPCaptures() | 
+                    pieces.get('b').getPCaptures() | pieces.get('q').getPCaptures() | pieces.get('a').getPCaptures());
         return gBC;
     }
     static long getWhiteCaptures() {
-        long gWC = (pieces.get('P').getCaptures() | pieces.get('R').getCaptures() | pieces.get('K').getCaptures() | 
-                    pieces.get('B').getCaptures() | pieces.get('Q').getCaptures() | pieces.get('A').getCaptures());
+        long gWC = (pieces.get('P').getPCaptures() | pieces.get('R').getPCaptures() | pieces.get('K').getPCaptures() | 
+                    pieces.get('B').getPCaptures() | pieces.get('Q').getPCaptures() | pieces.get('A').getPCaptures());
         return gWC;
     }
 

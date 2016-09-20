@@ -21,11 +21,10 @@ public class Queen extends Piece {
                 queenMoves = (verticalHorizontalHQ(allPieces, i)|diagonalAntiDiagonalHQ(allPieces, i)); //contains the location of the rook moves
                 if(this.team == Side.WHITE) {
                     queenMoves = queenMoves &~ piecesW;
-                    this.potentialCaptures |= queenMoves & piecesB;
                 } else {
                     queenMoves = queenMoves &~ piecesB;
-                    this.potentialCaptures |= queenMoves & piecesW;
                 }
+                this.potentialCaptures |= queenMoves;
                 for(int j = 0; j < 64; j++) {
                     if (((queenMoves>>j) & 1) == 1) { //we have found a rook move!!
                         moves += "" + (i/8) + (i%8) + (j/8) + (j%8) + " ";

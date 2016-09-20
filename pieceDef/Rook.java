@@ -21,11 +21,10 @@ public class Rook extends Piece {
                 rookMoves = verticalHorizontalHQ(allPieces, i); //contains the location of the rook moves
                 if(this.team == Side.WHITE) {
                     rookMoves = rookMoves &~ piecesW;
-                    this.potentialCaptures |= rookMoves & piecesB;
                 } else {
                     rookMoves = rookMoves &~ piecesB;
-                    this.potentialCaptures |= rookMoves & piecesW;
                 }
+                this.potentialCaptures |= rookMoves;
                 for(int j = 0; j < 64; j++) {
                     if (((rookMoves>>j) & 1) == 1) { //we have found a rook move!!
                         moves += "" + (i/8) + (i%8) + (j/8) + (j%8) + " ";

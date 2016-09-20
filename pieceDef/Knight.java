@@ -51,11 +51,10 @@ public class Knight extends Piece {
 
                 if(this.team == Side.WHITE) {
                     knightMoves = knightMoves &~ piecesW;
-                    this.potentialCaptures |= knightMoves & piecesB;
                 } else {
                     knightMoves = knightMoves &~ piecesB;
-                    this.potentialCaptures |= knightMoves & piecesW;
                 }
+                this.potentialCaptures |= knightMoves;
                 for(int j = 0; j < 64; j++) {
                     if (((knightMoves>>j) & 1) == 1) { //we have found a knight move!!
                         moves += "" + (i/8) + (i%8) + (j/8) + (j%8) + " ";

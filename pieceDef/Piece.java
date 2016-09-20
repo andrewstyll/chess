@@ -12,7 +12,7 @@ public abstract class Piece {
     protected long location;
     protected Side team;
     protected boolean isAlive;
-    protected long potentialCaptures;
+    protected long potentialCaptures; //all the potential moves where an opposing piece would be in danger
 
     //keep in mind, should match the system used by the board
     private long[] verticalMask = {
@@ -84,7 +84,7 @@ public abstract class Piece {
         return isAlive;
     }
 
-    public long getCaptures() {
+    public long getPCaptures() {
         return potentialCaptures;
     }
 
