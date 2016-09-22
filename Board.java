@@ -2,7 +2,7 @@ import java.util.*;
 import pieceDef.*;
 
 public class Board {
-    static HashMap<Character, Piece> pieces = new HashMap<Character, Piece>();
+    private static HashMap<Character, Piece> pieces = new HashMap<Character, Piece>();
 
 
     //WHITE IS THE CAPITALISED ONES
@@ -13,65 +13,47 @@ public class Board {
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-        {'P', 'P', 'P', 'P', ' ', 'P', 'P', 'P'},
+        {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
         {'R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R'},
     };
-    
-    //must get moves to update captures as captures are determined by potential moves
-    public static String possibleMovesWhite() {
-        String history = "";
-        String moves = "";
-
-        long piecesB = getBlackPosition();
-        long piecesW = getWhitePosition();
-        long tmp = piecesB|piecesW;
-        
-        moves += pieces.get('P').getMoves(piecesB, piecesW);
-        moves += pieces.get('R').getMoves(piecesB, piecesW);
-        moves += pieces.get('K').getMoves(piecesB, piecesW);
-        moves += pieces.get('B').getMoves(piecesB, piecesW);
-        moves += pieces.get('Q').getMoves(piecesB, piecesW);
-        moves += pieces.get('A').getMoves(piecesB, piecesW);
-
-        drawBoard(getWhiteCaptures());
-
-        if ((getWhiteCaptures() & pieces.get('k').getLocation()) != 0L) {
-            //king is in check
-            System.out.println("king is caught!");
-        }
-        System.out.println(moves);
-        return ""; 
-    }
-    
-    //all places on board where a piece can be captured (use to check king check status)
-    static long getBlackCaptures() {
-        long gBC = (pieces.get('p').getPCaptures() | pieces.get('r').getPCaptures() | pieces.get('k').getPCaptures() | 
-                    pieces.get('b').getPCaptures() | pieces.get('q').getPCaptures() | pieces.get('a').getPCaptures());
-        return gBC;
-    }
-    static long getWhiteCaptures() {
-        long gWC = (pieces.get('P').getPCaptures() | pieces.get('R').getPCaptures() | pieces.get('K').getPCaptures() | 
-                    pieces.get('B').getPCaptures() | pieces.get('Q').getPCaptures() | pieces.get('A').getPCaptures());
-        return gWC;
-    }
-
-    static long getBlackPosition() {
-        long gBP = (pieces.get('p').getLocation() | pieces.get('r').getLocation() | pieces.get('k').getLocation() | 
-                    pieces.get('b').getLocation() | pieces.get('q').getLocation() | pieces.get('a').getLocation());
-        return gBP;
-    }
-
-    static long getWhitePosition() {
-        long gWP = (pieces.get('P').getLocation() | pieces.get('R').getLocation() | pieces.get('K').getLocation() | 
-                    pieces.get('B').getLocation() | pieces.get('Q').getLocation() | pieces.get('A').getLocation());
-        return gWP;
-    }
     
     public static void initBoard() {
         initPieces();
         charBoardToBitBoard();
-        possibleMovesWhite();
+        
+        Moves.possibleMovesWhite(pieces);
+        Moves.showMoves();
+        Moves.clearMoves();
+        Moves.possibleMovesBlack(pieces);
+        Moves.showMoves();
+        Moves.clearMoves();
     }
+    
+    //makes a move based on encoded input
+    /*public static long makeMove(String move, long location) {
+        int startLocation = 0, endLocation = 0;
+        long base = 0L;
+
+        if(move.charAt(3) != 'P') { //regular move
+            startLocation = Character.getNumericValue(move.charAt(0))*8 + Character.getNumericValue(move.charAt(1));//starting location on grid
+            endLocation = Character.getNumericValue(move.charAt(2))*8 + Character.getNumericValue(move.charAt(3));//starting location on grid
+            if(((location>>startLocation)&1) == 1) { //remove piece existing on board (only true for correct board)
+                base = powerOf2(startLocation);
+                location &= ~base;
+                base = powerOf2(endLocation);
+                location |= base;
+            } else { //remove deleted piece wherever it exists
+                base = powerOf2(endLocation);
+                location |= ~base;
+            }
+        } else { //pawn promotion //not only must i know black and white, i must also know what board i am adding the promoted pawn to
+            
+        }
+    }*/
+
+    //must get moves to update captures as captures are determined by potential moves 
+    //store the moves differently, seperate them by their piece. for every move I will have to cycle through every
+    //piece bitboard. I will need to know what color made the move.
 
     static void initPieces() {
         pieces.put('p', new Pawn(Piece.Side.BLACK));

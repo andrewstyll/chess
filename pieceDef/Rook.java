@@ -9,9 +9,11 @@ public class Rook extends Piece {
         potentialCaptures = 0L;
     }
     
-    public String getMoves(long piecesB, long piecesW) {
+    public int[] getMoves(long piecesB, long piecesW) {
         
-        String moves = "";
+        int[] moves = new int[218];
+        int movesIndex = 0;
+
         long allPieces = piecesB | piecesW;
         this.potentialCaptures = 0L;
 
@@ -27,7 +29,7 @@ public class Rook extends Piece {
                 this.potentialCaptures |= rookMoves;
                 for(int j = 0; j < 64; j++) {
                     if (((rookMoves>>j) & 1) == 1) { //we have found a rook move!!
-                        moves += "" + (i/8) + (i%8) + (j/8) + (j%8) + " ";
+                        moves[movesIndex++] = encodeMove(i/8, i%8, j/8, j%8, ' ');
                     }
                 }
             }

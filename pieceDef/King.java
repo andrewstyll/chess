@@ -32,9 +32,11 @@ public class King extends Piece {
         return kingMoves;
     }
 
-    public String getMoves(long piecesB, long piecesW) {
+    public int[] getMoves(long piecesB, long piecesW) {
         
-        String moves = "";
+        int[] moves = new int[218];
+        int movesIndex = 0;
+
         long allPieces = piecesB | piecesW;
         this.potentialCaptures = 0L;
 
@@ -52,7 +54,7 @@ public class King extends Piece {
                 this.potentialCaptures |= kingMoves;
                 for(int j = 0; j < 64; j++) {
                     if (((kingMoves>>j) & 1) == 1) { //we have found a king move!!
-                        moves += "" + (i/8) + (i%8) + (j/8) + (j%8) + " ";
+                        moves[movesIndex++] = encodeMove(i/8, i%8, j/8, j%8, ' ');
                     }
                 }
             }
