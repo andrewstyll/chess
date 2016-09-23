@@ -106,22 +106,22 @@ public class Pawn extends Piece {
             
             for(int i = 0; i < 64; i++) {
                 if(((uBoard>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(6, i%8, 7, i%8, 'Q');
-                    moves[movesIndex++] = encodeMove(6, i%8, 7, i%8, 'R');
-                    moves[movesIndex++] = encodeMove(6, i%8, 7, i%8, 'B');
-                    moves[movesIndex++] = encodeMove(6, i%8, 7, i%8, 'K');
+                    moves[movesIndex++] = encodeMove(6, i%8, 7, i%8, 'q');
+                    moves[movesIndex++] = encodeMove(6, i%8, 7, i%8, 'r');
+                    moves[movesIndex++] = encodeMove(6, i%8, 7, i%8, 'b');
+                    moves[movesIndex++] = encodeMove(6, i%8, 7, i%8, 'k');
                 }
                 if(((cRBoard>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(6, i%8-1, 7, i%8, 'Q');
-                    moves[movesIndex++] = encodeMove(6, i%8-1, 7, i%8, 'R');
-                    moves[movesIndex++] = encodeMove(6, i%8-1, 7, i%8, 'B');
-                    moves[movesIndex++] = encodeMove(6, i%8-1, 7, i%8, 'K');
+                    moves[movesIndex++] = encodeMove(6, i%8-1, 7, i%8, 'q');
+                    moves[movesIndex++] = encodeMove(6, i%8-1, 7, i%8, 'r');
+                    moves[movesIndex++] = encodeMove(6, i%8-1, 7, i%8, 'b');
+                    moves[movesIndex++] = encodeMove(6, i%8-1, 7, i%8, 'k');
                 }
                 if(((cLBoard>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(6, i%8+1, 7, i%8, 'Q');
-                    moves[movesIndex++] = encodeMove(6, i%8+1, 7, i%8, 'R');
-                    moves[movesIndex++] = encodeMove(6, i%8+1, 7, i%8, 'B');
-                    moves[movesIndex++] = encodeMove(6, i%8+1, 7, i%8, 'K');
+                    moves[movesIndex++] = encodeMove(6, i%8+1, 7, i%8, 'q');
+                    moves[movesIndex++] = encodeMove(6, i%8+1, 7, i%8, 'r');
+                    moves[movesIndex++] = encodeMove(6, i%8+1, 7, i%8, 'b');
+                    moves[movesIndex++] = encodeMove(6, i%8+1, 7, i%8, 'k');
                 }
             }
             

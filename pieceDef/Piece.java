@@ -73,28 +73,28 @@ public abstract class Piece {
         int move = 0;
         move = (x1) | (y1<<4) | (x2<<8) | (y2<<12);
         switch(promote) {
-            case 'Q':
+            case 'R':
                 move = move | 1<<16;
                 break;
-            case 'R':
+            case 'K':
                 move = move | 1<<17;
                 break;
             case 'B':
                 move = move | 1<<18;
                 break;
-            case 'K':
+            case 'Q':
                 move = move | 1<<19;
                 break;
-            case 'q':
+            case 'r':
                 move = move | 1<<20;
                 break;
-            case 'r':
+            case 'k':
                 move = move | 1<<21;
                 break;
             case 'b':
                 move = move | 1<<22;
                 break;
-            case 'k':
+            case 'q':
                 move = move | 1<<23;
                 break;
         }

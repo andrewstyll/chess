@@ -11,31 +11,75 @@ public class Moves {
     static int MAX_MOVES = 218; //this is supposed to be the maximum number of moves for any position
 
     static int[] moves = new int[MAX_MOVES];
-    
+
+    public static void checkMoves(HashMap<Character, Piece> pieces) {
+        possibleMovesWhite(pieces);
+        showMoves();
+        possibleMovesBlack(pieces);
+        showMoves();
+    }
+
+    public static void makeMoves(HashMap<Character, Piece> pieces) {
+        for(int i = 0; i < MAX_MOVES; i++) {
+            if(moves[i] != 0) {
+                long PB = makeMove(moves[i], pieces.get('P').getLocation(), 0);
+                long RB = makeMove(moves[i], pieces.get('R').getLocation(), 1);
+                long KB = makeMove(moves[i], pieces.get('K').getLocation(), 2);
+                long BB = makeMove(moves[i], pieces.get('B').getLocation(), 4);
+                long QB = makeMove(moves[i], pieces.get('Q').getLocation(), 8);
+                long AB = makeMove(moves[i], pieces.get('A').getLocation(), 0);
+
+                long pB = makeMove(moves[i], pieces.get('p').getLocation(), 0);
+                long rB = makeMove(moves[i], pieces.get('r').getLocation(), 16);
+                long kB = makeMove(moves[i], pieces.get('k').getLocation(), 32);
+                long bB = makeMove(moves[i], pieces.get('b').getLocation(), 64);
+                long qB = makeMove(moves[i], pieces.get('q').getLocation(), 128);
+                long aB = makeMove(moves[i], pieces.get('a').getLocation(), 0);
+
+                long board = pB | rB | kB | bB | qB | aB | PB | RB | KB | BB | QB | AB;
+                //long board = PB | RB | KB | BB | QB | AB;
+                //Board.drawBoard(board);
+                //System.out.print(moves[i] + " ");
+            } else {
+                break;
+            }
+        }
+    }
+
     //makes a move based on encoded input
-    /*public static long makeMove(String move, long location) {
+    public static long makeMove(int move, long location, int promo) {
         int startLocation = 0, endLocation = 0;
         long base = 0L;
 
-        if(move.charAt(3) != 'P') { //regular move
-            startLocation = Character.getNumericValue(move.charAt(0))*8 + Character.getNumericValue(move.charAt(1));//starting location on grid
-            endLocation = Character.getNumericValue(move.charAt(2))*8 + Character.getNumericValue(move.charAt(3));//starting location on grid
-            if(((location>>startLocation)&1) == 1) { //remove piece existing on board (only true for correct board)
-                base = powerOf2(startLocation);
-                location &= ~base;
-                base = powerOf2(endLocation);
-                location |= base;
-            } else { //remove deleted piece wherever it exists
-                base = powerOf2(endLocation);
-                location |= ~base;
-            }
-        } else { //pawn promotion //not only must i know black and white, i must also know what board i am adding the promoted pawn to
+        if(decodeMove(move, 3) == 0) { //regular move
+            startLocation = decodeMove(move, 1); //starting location on grid
+            endLocation = decodeMove(move, 2);
             
+        } else { //pawn promotion //not only must i know black and white, i must also know what board i am adding the promoted pawn to
+            startLocation = decodeMove(move, 1); //starting location on grid
+            endLocation = decodeMove(move, 2);
+            int piecePromo = decodeMove(move, 3);
+
+            if(piecePromo == promo) {
+                System.out.println("PROMOTION: " + piecePromo);
+                base = Main.powerOf2(endLocation);
+                location = location | base;
+            }
         }
-    }*/
+        
+        if(((location>>startLocation)&1) == 1) { //remove piece existing on board (only true for correct board)
+            base = Main.powerOf2(startLocation);
+            location = location & ~base;
+            base = Main.powerOf2(endLocation);
+            location = location | base;
+        } else { //remove deleted piece wherever it exists
+            base = Main.powerOf2(endLocation);
+            location = location & ~base;
+        }
+        
+        return location;
+    }
    
-    // i want to store this in an array. I need to come up with values so that when I 
-    // how will I make moves?
     public static void possibleMovesWhite(HashMap<Character, Piece> pieces) {
 
         int[] pawnMoves = new int[MAX_MOVES];
@@ -108,6 +152,9 @@ public class Moves {
     private static void compileMoves(int[] p, int[] r, int[] k, int[] b, int[] q, int[] a) {
         int pI = 0, rI = 0, kI = 0, bI = 0, qI = 0, aI = 0;
         for(int i = 0; i < MAX_MOVES; i++) {
+            if(moves[i] != 0) {
+                continue;
+            }
             if (p[pI] != 0 && pI < MAX_MOVES) {
                 moves[i] = p[pI++];
             } else if (r[rI] != 0 && rI < MAX_MOVES) {
@@ -124,6 +171,29 @@ public class Moves {
                 break;
             }
         }
+    }
+
+    private static int decodeMove(int move, int step) {
+        //use mask to mask off the first byte for the starting point
+        int xMask, yMask, pMask, x, y, promote;
+
+        if(step == 1) { //looking for x1 and y1
+            xMask = 0x0000000F;
+            yMask = 0x000000F0;
+            x = move&xMask;
+            y = ((move&yMask)>>4);
+        } else if(step == 2) {
+            xMask = 0x00000F00;
+            yMask = 0x0000F000;
+            x = ((move&xMask)>>8);
+            y = ((move&yMask)>>12);
+        } else { // step will equal 3
+            pMask = 0x00FF0000;
+            promote = ((move&pMask)>>16);
+            return promote;
+        }
+        
+        return (y*8+x);
     }
 
     public static void showMoves() {
