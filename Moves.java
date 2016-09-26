@@ -49,32 +49,25 @@ public class Moves {
         return returnBoard;
     }
     
-    public static void makeMoves(int[] moves) {
+    public static long makeMoveAllPieces(int move) {
         HashMap<Character, Piece> pieces = Board.getPieces();
 
-        for(int i = 0; i < MAX_MOVES; i++) {
-            if(moves[i] != 0) {
-                long PB = makeMove(moves[i], pieces.get('P').getLocation(), 0);
-                long RB = makeMove(moves[i], pieces.get('R').getLocation(), 1);
-                long KB = makeMove(moves[i], pieces.get('K').getLocation(), 2);
-                long BB = makeMove(moves[i], pieces.get('B').getLocation(), 4);
-                long QB = makeMove(moves[i], pieces.get('Q').getLocation(), 8);
-                long AB = makeMove(moves[i], pieces.get('A').getLocation(), 0);
+        long PB = makeMove(moves[i], pieces.get('P').getLocation(), 0);
+        long RB = makeMove(moves[i], pieces.get('R').getLocation(), 1);
+        long KB = makeMove(moves[i], pieces.get('K').getLocation(), 2);
+        long BB = makeMove(moves[i], pieces.get('B').getLocation(), 4);
+        long QB = makeMove(moves[i], pieces.get('Q').getLocation(), 8);
+        long AB = makeMove(moves[i], pieces.get('A').getLocation(), 0);
 
-                long pB = makeMove(moves[i], pieces.get('p').getLocation(), 0);
-                long rB = makeMove(moves[i], pieces.get('r').getLocation(), 16);
-                long kB = makeMove(moves[i], pieces.get('k').getLocation(), 32);
-                long bB = makeMove(moves[i], pieces.get('b').getLocation(), 64);
-                long qB = makeMove(moves[i], pieces.get('q').getLocation(), 128);
-                long aB = makeMove(moves[i], pieces.get('a').getLocation(), 0);
+        long pB = makeMove(moves[i], pieces.get('p').getLocation(), 0);
+        long rB = makeMove(moves[i], pieces.get('r').getLocation(), 16);
+        long kB = makeMove(moves[i], pieces.get('k').getLocation(), 32);
+        long bB = makeMove(moves[i], pieces.get('b').getLocation(), 64);
+        long qB = makeMove(moves[i], pieces.get('q').getLocation(), 128);
+        long aB = makeMove(moves[i], pieces.get('a').getLocation(), 0);
 
-                long board = pB | rB | kB | bB | qB | aB | PB | RB | KB | BB | QB | AB;
-                //Board.drawBoard(board);
-                //System.out.print(moves[i] + " ");
-            } else {
-                break;
-            }
-        }
+        long board = pB | rB | kB | bB | qB | aB | PB | RB | KB | BB | QB | AB;
+        return board;
     }
    
     //this should return all legal moves for white, AKA white should not put its king in check with any of these
@@ -103,6 +96,7 @@ public class Moves {
     }
     
     public static int[] possibleMovesBlack(boolean whitesMove) {
+        //whitesMove will always be false here won't it LOL
 
         HashMap<Character, Piece> pieces = Board.getPieces();
         
