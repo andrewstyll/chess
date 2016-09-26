@@ -9,17 +9,49 @@ import pieceDef.*;
 public class Moves {
 
     static int MAX_MOVES = 218; //this is supposed to be the maximum number of moves for any position
-
-    static int[] moves = new int[MAX_MOVES];
-
-    public static void checkMoves(HashMap<Character, Piece> pieces) {
-        possibleMovesWhite(pieces);
-        showMoves();
-        possibleMovesBlack(pieces);
-        showMoves();
+   
+    public static void movesTest() {
+        showMoves(possibleMovesWhite(true));
+        showMoves(possibleMovesBlack(false));
     }
 
-    public static void makeMoves(HashMap<Character, Piece> pieces) {
+
+    //makes a move based on encoded input
+    public static long makeMove(int move, long location, int promo) {
+        int startLocation = 0, endLocation = 0;
+        long base = 0L, returnBoard = 0L; //with a return board, the move doesn't get saved unless i want it to
+
+        if(decodeMove(move, 3) == 0) { //regular move
+            startLocation = decodeMove(move, 1); //starting location on grid
+            endLocation = decodeMove(move, 2);
+            
+        } else { //pawn promotion //not only must i know black and white, i must also know what board i am adding the promoted pawn to
+            startLocation = decodeMove(move, 1); //starting location on grid
+            endLocation = decodeMove(move, 2);
+            int piecePromo = decodeMove(move, 3);
+
+            if(piecePromo == promo) {
+                base = Main.powerOf2(endLocation);
+                returnBoard = location | base;
+            }
+        }
+        
+        if(((location>>startLocation)&1) == 1) { //remove piece existing on board (only true for correct board)
+            base = Main.powerOf2(startLocation);
+            returnBoard = location & ~base;
+            base = Main.powerOf2(endLocation);
+            returnBoard = location | base;
+        } else { //remove deleted piece wherever it exists
+            base = Main.powerOf2(endLocation);
+            returnBoard = location & ~base;
+        }
+        
+        return returnBoard;
+    }
+    
+    public static void makeMoves(int[] moves) {
+        HashMap<Character, Piece> pieces = Board.getPieces();
+
         for(int i = 0; i < MAX_MOVES; i++) {
             if(moves[i] != 0) {
                 long PB = makeMove(moves[i], pieces.get('P').getLocation(), 0);
@@ -37,7 +69,6 @@ public class Moves {
                 long aB = makeMove(moves[i], pieces.get('a').getLocation(), 0);
 
                 long board = pB | rB | kB | bB | qB | aB | PB | RB | KB | BB | QB | AB;
-                //long board = PB | RB | KB | BB | QB | AB;
                 //Board.drawBoard(board);
                 //System.out.print(moves[i] + " ");
             } else {
@@ -45,42 +76,11 @@ public class Moves {
             }
         }
     }
-
-    //makes a move based on encoded input
-    public static long makeMove(int move, long location, int promo) {
-        int startLocation = 0, endLocation = 0;
-        long base = 0L;
-
-        if(decodeMove(move, 3) == 0) { //regular move
-            startLocation = decodeMove(move, 1); //starting location on grid
-            endLocation = decodeMove(move, 2);
-            
-        } else { //pawn promotion //not only must i know black and white, i must also know what board i am adding the promoted pawn to
-            startLocation = decodeMove(move, 1); //starting location on grid
-            endLocation = decodeMove(move, 2);
-            int piecePromo = decodeMove(move, 3);
-
-            if(piecePromo == promo) {
-                System.out.println("PROMOTION: " + piecePromo);
-                base = Main.powerOf2(endLocation);
-                location = location | base;
-            }
-        }
-        
-        if(((location>>startLocation)&1) == 1) { //remove piece existing on board (only true for correct board)
-            base = Main.powerOf2(startLocation);
-            location = location & ~base;
-            base = Main.powerOf2(endLocation);
-            location = location | base;
-        } else { //remove deleted piece wherever it exists
-            base = Main.powerOf2(endLocation);
-            location = location & ~base;
-        }
-        
-        return location;
-    }
    
-    public static void possibleMovesWhite(HashMap<Character, Piece> pieces) {
+    //this should return all legal moves for white, AKA white should not put its king in check with any of these
+    public static int[] possibleMovesWhite(boolean whitesMove) {
+
+        HashMap<Character, Piece> pieces = Board.getPieces();
 
         int[] pawnMoves = new int[MAX_MOVES];
         int[] rookMoves = new int[MAX_MOVES];
@@ -99,11 +99,13 @@ public class Moves {
         queenMoves = pieces.get('Q').getMoves(piecesB, piecesW);
         kingMoves = pieces.get('A').getMoves(piecesB, piecesW);
     
-        compileMoves(pawnMoves, rookMoves, knightMoves, bishopMoves, queenMoves, kingMoves);
+        return compileMoves(pawnMoves, rookMoves, knightMoves, bishopMoves, queenMoves, kingMoves, whitesMove);
     }
     
-    public static void possibleMovesBlack(HashMap<Character, Piece> pieces) {
+    public static int[] possibleMovesBlack(boolean whitesMove) {
 
+        HashMap<Character, Piece> pieces = Board.getPieces();
+        
         int[] pawnMoves = new int[MAX_MOVES];
         int[] rookMoves = new int[MAX_MOVES];
         int[] knightMoves = new int[MAX_MOVES];
@@ -121,7 +123,7 @@ public class Moves {
         queenMoves = pieces.get('q').getMoves(piecesB, piecesW);
         kingMoves = pieces.get('a').getMoves(piecesB, piecesW);
 
-        compileMoves(pawnMoves, rookMoves, knightMoves, bishopMoves, queenMoves, kingMoves);
+        return compileMoves(pawnMoves, rookMoves, knightMoves, bishopMoves, queenMoves, kingMoves, whitesMove);
     }
     
     static long getBlackPosition(HashMap<Character, Piece> pieces) {
@@ -136,7 +138,9 @@ public class Moves {
         return gWP;
     }
 
-    //all places on board where a piece can be captured (use to check king check status)
+    //captures only update when get move is called for each piece
+    //this is a final captrue zone after all of the moves are made. This isn't useful for eliminating bad moves from the
+    //board
     static long getBlackCaptures(HashMap<Character, Piece> pieces) {
         long gBC = (pieces.get('p').getPCaptures() | pieces.get('r').getPCaptures() | pieces.get('k').getPCaptures() | 
                     pieces.get('b').getPCaptures() | pieces.get('q').getPCaptures() | pieces.get('a').getPCaptures());
@@ -149,28 +153,157 @@ public class Moves {
         return gWC;
     }
 
-    private static void compileMoves(int[] p, int[] r, int[] k, int[] b, int[] q, int[] a) {
+    public static boolean kingSafety(int move, boolean whitesMove) {
+        HashMap<Character, Piece> pieces = Board.getPieces();
+        long unsafeBoard = 0L;
+
+        Piece pawnW = pieces.get('P');
+        Piece rookW = pieces.get('R');
+        Piece knightW = pieces.get('K');
+        Piece bishopW = pieces.get('B');
+        Piece queenW = pieces.get('Q');
+        Piece kingW = pieces.get('A');
+
+        Piece pawnB = pieces.get('p');
+        Piece rookB = pieces.get('r');
+        Piece knightB = pieces.get('k');
+        Piece bishopB = pieces.get('b');
+        Piece queenB = pieces.get('q');
+        Piece kingB = pieces.get('a');
+
+        long PB = makeMove(move, pawnW.getLocation(), 0);
+        long RB = makeMove(move, rookW.getLocation(), 1);
+        long KB = makeMove(move, knightW.getLocation(), 2);
+        long BB = makeMove(move, bishopW.getLocation(), 4);
+        long QB = makeMove(move, queenW.getLocation(), 8);
+        long AB = makeMove(move, kingW.getLocation(), 0);
+
+        long pB = makeMove(move, pawnB.getLocation(), 0);
+        long rB = makeMove(move, rookB.getLocation(), 16);
+        long kB = makeMove(move, knightB.getLocation(), 32);
+        long bB = makeMove(move, bishopB.getLocation(), 64);
+        long qB = makeMove(move, queenB.getLocation(), 128);
+        long aB = makeMove(move, kingB.getLocation(), 0);
+
+        long wBoard = PB | RB | KB | BB | QB | AB;
+        long bBoard = pB | rB | kB | bB | qB | aB;
+        //this is now the location of all of the peices on the board. Now I need to check their capture zones
+        //get all the potential moves for all of the black pieces.
+        
+        if(whitesMove) { //if it's white's move, get the black captures and AND them with the white king location
+            unsafeBoard = unsafeBoard | pawnB.getMoveBoard(bBoard, wBoard, pB);
+
+            for(long i = 0; i < 64; i++) {
+                if(((rB>>i) & 1) == 1) {
+                    unsafeBoard = unsafeBoard | rookB.getMoveBoard(bBoard, wBoard, i);
+                }
+                if(((bB>>i) & 1) == 1) {
+                    unsafeBoard = unsafeBoard | bishopB.getMoveBoard(bBoard, wBoard, i);
+                }
+                if(((qB>>i) & 1) == 1) {
+                    unsafeBoard = unsafeBoard | queenB.getMoveBoard(bBoard, wBoard, i);
+                }
+                if(((kB>>i) & 1) == 1) {
+                    unsafeBoard = unsafeBoard | knightB.getMoveBoard(bBoard, wBoard, i);
+                }
+                if(((aB>>i) & 1) == 1) {
+                    unsafeBoard = unsafeBoard | kingB.getMoveBoard(bBoard, wBoard, i);
+                }
+            }
+            
+            //if it's whites move, check the black pieces with whites board
+            if((unsafeBoard & kingW.getLocation()) == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+
+            unsafeBoard = unsafeBoard | pawnW.getMoveBoard(bBoard, wBoard, PB);
+
+            for(long i = 0; i < 64; i++) {
+                if(((RB>>i) & 1) == 1) {
+                    unsafeBoard = unsafeBoard | rookW.getMoveBoard(bBoard, wBoard, i);
+                }
+                if(((BB>>i) & 1) == 1) {
+                    unsafeBoard = unsafeBoard | bishopW.getMoveBoard(bBoard, wBoard, i);
+                }
+                if(((QB>>i) & 1) == 1) {
+                    unsafeBoard = unsafeBoard | queenW.getMoveBoard(bBoard, wBoard, i);
+                }
+                if(((KB>>i) & 1) == 1) {
+                    unsafeBoard = unsafeBoard | knightW.getMoveBoard(bBoard, wBoard, i);
+                }
+                if(((AB>>i) & 1) == 1) {
+                    unsafeBoard = unsafeBoard | kingW.getMoveBoard(bBoard, wBoard, i);
+                }
+            }
+                
+            if((unsafeBoard & kingB.getLocation()) == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    
+    //only add to the array if the move will be safe for each colour's king
+    private static int[] compileMoves(int[] p, int[] r, int[] k, int[] b, int[] q, int[] a, boolean whitesMove) {
+        
+        int[] moves = new int[MAX_MOVES];
         int pI = 0, rI = 0, kI = 0, bI = 0, qI = 0, aI = 0;
+        
         for(int i = 0; i < MAX_MOVES; i++) {
             if(moves[i] != 0) {
                 continue;
             }
             if (p[pI] != 0 && pI < MAX_MOVES) {
-                moves[i] = p[pI++];
+                if(kingSafety(p[pI], whitesMove)) {
+                    moves[i] = p[pI++];
+                } else {
+                    pI++; //we want to skip this move cause it isn't valid
+                    i--;
+                }
             } else if (r[rI] != 0 && rI < MAX_MOVES) {
-                moves[i] = r[rI++];
+                if(kingSafety(r[rI], whitesMove)) {
+                    moves[i] = r[rI++];
+                } else {
+                    rI++; //we want to skip this move cause it isn't valid
+                    i--;
+                }
             } else if (k[kI] != 0  && kI < MAX_MOVES) {
-                moves[i] = k[kI++];
+                if(kingSafety(k[kI], whitesMove)) {
+                    moves[i] = k[kI++];
+                } else {
+                    kI++; //we want to skip this move cause it isn't valid
+                    i--;
+                }
             } else if (b[bI] != 0 && bI < MAX_MOVES) {
-                moves[i] = b[bI++];
+                if(kingSafety(b[bI], whitesMove)) {
+                    moves[i] = b[bI++];
+                } else {
+                    bI++; //we want to skip this move cause it isn't valid
+                    i--;
+                }
             } else if (q[qI] != 0 && qI < MAX_MOVES) {
-                moves[i] = q[qI++];
+                if(kingSafety(q[qI], whitesMove)) {
+                    moves[i] = q[qI++];
+                } else {
+                    qI++; //we want to skip this move cause it isn't valid
+                    i--;
+                }
             } else if (a[aI] != 0 && aI < MAX_MOVES) {
-                moves[i] = a[aI++];
+                if(kingSafety(a[aI], whitesMove)) {
+                    moves[i] = a[aI++];
+                } else {
+                    aI++; //we want to skip this move cause it isn't valid
+                    i--;
+                }
             } else {
                 break;
             }
         }
+        return moves;
     }
 
     private static int decodeMove(int move, int step) {
@@ -196,18 +329,12 @@ public class Moves {
         return (y*8+x);
     }
 
-    public static void showMoves() {
+    public static void showMoves(int[] moves) {
         for(int i = 0; i < MAX_MOVES; i++) {
             if(moves[i] != 0) {
                 System.out.print(Integer.toHexString(moves[i]) + " ");
             }
         }
         System.out.println("");
-    }
-
-    public static void clearMoves() {
-        for(int i = 0; i < MAX_MOVES; i++) {
-            moves[i] = 0;
-        }
     }
 }

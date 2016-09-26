@@ -20,9 +20,6 @@ public class Main {
         window.setVisible(true);*/
 
         Board.initBoard();
-        HashMap<Character, Piece> pieces = Board.getPieces();
-
-        Moves.checkMoves(pieces);
-        Moves.makeMoves(pieces);
+        Moves.movesTest();
     }
 }

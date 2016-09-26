@@ -12,7 +12,7 @@ public class King extends Piece {
         potentialCaptures = 0L;
     }
 
-    private long kMoves(long i) {
+    public long getMoveBoard(long piecesB, long piecesW, long i) {
         
         long above = 0L, same = 0L, below = 0L;
         long kingMoves = 0L;
@@ -29,6 +29,11 @@ public class King extends Piece {
         if(i%8 > 6) {
             kingMoves = kingMoves &~ lSide;
         }
+        if(this.team == Side.WHITE) {
+            kingMoves = kingMoves &~ piecesW;
+        } else {
+            kingMoves = kingMoves &~ piecesB;
+        }
         return kingMoves;
     }
 
@@ -44,13 +49,8 @@ public class King extends Piece {
             long kingMoves = 0L;
             if (((location>>i) & 1) == 1) { //we have found a king!
                 
-                kingMoves = kMoves(i);
+                kingMoves = getMoveBoard(piecesB, piecesW, (long)i);
 
-                if(this.team == Side.WHITE) {
-                    kingMoves = kingMoves &~ piecesW;
-                } else {
-                    kingMoves = kingMoves &~ piecesB;
-                }
                 this.potentialCaptures |= kingMoves;
                 for(int j = 0; j < 64; j++) {
                     if (((kingMoves>>j) & 1) == 1) { //we have found a king move!!

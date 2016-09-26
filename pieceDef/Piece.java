@@ -120,5 +120,6 @@ public abstract class Piece {
         return potentialCaptures;
     }
 
+    public abstract long getMoveBoard(long piecesB, long piecesW, long i);
     public abstract int[] getMoves(long a, long b);
 }

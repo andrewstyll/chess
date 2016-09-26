@@ -10,6 +10,20 @@ public class Pawn extends Piece {
         potentialCaptures = 0L;
     }
 
+    public long getMoveBoard(long piecesB, long piecesW, long i) {
+        //IN THIS CASE, LONG IS THE INDEX OF ALL THE PAWNS
+        long pawnBoard = 0L;
+        long cRBoard = 0L, cLBoard = 0L;
+        if(this.team == Side.WHITE) {
+            cRBoard = (i>>7) &~ lSide;
+            cLBoard = (i>>9) &~ rSide;
+        } else {
+            cRBoard = (i<<9) &~ lSide;
+            cLBoard = (i<<7) &~ rSide;
+        }
+        return (cRBoard | cLBoard);
+    }
+
     //y1 x1 y2 x2
     public int[] getMoves(long piecesB, long piecesW) {
         

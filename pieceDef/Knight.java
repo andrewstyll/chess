@@ -9,7 +9,7 @@ public class Knight extends Piece {
         potentialCaptures = 0L;
     }
     
-    private long kMoves(long i) {
+    public long getMoveBoard(long piecesB, long piecesW, long i) {
         
         long NE = 0L, SE = 0L, NW = 0L, SW = 0L;
         long knightMoves = 0L;
@@ -34,6 +34,11 @@ public class Knight extends Piece {
                 knightMoves = knightMoves &~ (lSide<<1);
             }
         }
+        if(this.team == Side.WHITE) {
+            knightMoves = knightMoves &~ piecesW;
+        } else {
+            knightMoves = knightMoves &~ piecesB;
+        }
         return knightMoves;
     }
 
@@ -49,13 +54,8 @@ public class Knight extends Piece {
             long knightMoves = 0L;
             if (((location>>i) & 1) == 1) { //we have found a knight!
                 
-                knightMoves = kMoves(i);
+                knightMoves = getMoveBoard(piecesB, piecesW, i);
 
-                if(this.team == Side.WHITE) {
-                    knightMoves = knightMoves &~ piecesW;
-                } else {
-                    knightMoves = knightMoves &~ piecesB;
-                }
                 this.potentialCaptures |= knightMoves;
                 for(int j = 0; j < 64; j++) {
                     if (((knightMoves>>j) & 1) == 1) { //we have found a knight move!!
