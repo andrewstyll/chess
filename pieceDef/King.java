@@ -1,11 +1,13 @@
 package pieceDef;
 import java.util.Arrays;
+import java.util.Stack;
 
 public class King extends Piece {
 
     private long kingMask;
 
     public King(Side s) {
+        moveHistory = new Stack<Long>();
         location = 0L;
         team = s;
         isAlive = true;

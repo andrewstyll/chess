@@ -16,6 +16,17 @@ public class Moves {
     }
 
 
+    public static void undoMoveAllPieces() {
+        HashMap<Character, Piece> pieces = Board.getPieces();
+        
+        for(Map.Entry<Character, Piece> entry : pieces.entrySet()) {
+            Piece chessPiece = entry.getValue();
+            if(!chessPiece.moveHistoryEmpty()) {
+                chessPiece.popMove();
+            }
+        }
+    }
+
     //makes a move based on encoded input
     public static long makeMove(int move, long location, int promo) {
         int startLocation = 0, endLocation = 0;
@@ -48,26 +59,62 @@ public class Moves {
         
         return returnBoard;
     }
-    
-    public static long makeMoveAllPieces(int move) {
+   
+    //so every time a move is made I need a way of remembering the original location of the move so then when i
+    //evntually complete my alpha beta function, the pieces on my board haven't actually gone anywhere. but i need to
+    //store and access their "new" temporary locations. My idea is this:
+    //
+    //Each piece will have a stack that holds the temporary locations of the pieces. The top value of the stack will be
+    //the "current" location of the piece. The maximum stack size is 10 so this should be okay. so every time i undo a
+    //move, i'll just pop off the tops of every piece and the moves will be undone. 
+    //
+    //This is correct because every make move will push a new value on the stack, and every undo move will pop a value.
+    //If every make move is matched by an undo move, the stack should return to 0 when I return to the head
+ 
+    public static void makeMoveAllPieces(int move) {
         HashMap<Character, Piece> pieces = Board.getPieces();
+        int promo;
+        long newLocation, board = 0L;
 
-        long PB = makeMove(moves[i], pieces.get('P').getLocation(), 0);
-        long RB = makeMove(moves[i], pieces.get('R').getLocation(), 1);
-        long KB = makeMove(moves[i], pieces.get('K').getLocation(), 2);
-        long BB = makeMove(moves[i], pieces.get('B').getLocation(), 4);
-        long QB = makeMove(moves[i], pieces.get('Q').getLocation(), 8);
-        long AB = makeMove(moves[i], pieces.get('A').getLocation(), 0);
-
-        long pB = makeMove(moves[i], pieces.get('p').getLocation(), 0);
-        long rB = makeMove(moves[i], pieces.get('r').getLocation(), 16);
-        long kB = makeMove(moves[i], pieces.get('k').getLocation(), 32);
-        long bB = makeMove(moves[i], pieces.get('b').getLocation(), 64);
-        long qB = makeMove(moves[i], pieces.get('q').getLocation(), 128);
-        long aB = makeMove(moves[i], pieces.get('a').getLocation(), 0);
-
-        long board = pB | rB | kB | bB | qB | aB | PB | RB | KB | BB | QB | AB;
-        return board;
+        for(Map.Entry<Character, Piece> entry : pieces.entrySet()) {
+            char key = entry.getKey();
+            Piece chessPiece = entry.getValue();
+            
+            switch(key) {
+                case 'R':
+                    promo = 1;
+                    break;
+                case 'K':
+                    promo = 2;
+                    break;
+                case 'B':
+                    promo = 4;
+                    break;
+                case 'Q':
+                    promo = 8;
+                    break;
+                case 'r':
+                    promo = 16;
+                    break;
+                case 'k':
+                    promo = 32;
+                    break;
+                case 'b':
+                    promo = 64;
+                    break;
+                case 'q':
+                    promo = 128;
+                    break;
+                default:
+                    promo = 0;
+                    break;
+            }
+            newLocation = makeMove(move, chessPiece.getLocation(), promo);
+            chessPiece.pushMove(newLocation);
+        
+            //for display and test purposes
+            board |= newLocation;
+        }
     }
    
     //this should return all legal moves for white, AKA white should not put its king in check with any of these

@@ -1,8 +1,10 @@
 package pieceDef;
+import java.util.Stack;
 
 public class Knight extends Piece {
 
     public Knight(Side s) {
+        moveHistory = new Stack<Long>();
         location = 0L;
         team = s;
         isAlive = true;

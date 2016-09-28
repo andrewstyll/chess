@@ -1,8 +1,10 @@
 package pieceDef;
+import java.util.Stack;
 
 public class Bishop extends Piece {
 
     public Bishop(Side s) {
+        moveHistory = new Stack<Long>();
         location = 0L;
         team = s;
         isAlive = true;

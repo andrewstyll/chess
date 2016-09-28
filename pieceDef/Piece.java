@@ -1,4 +1,5 @@
 package pieceDef;
+import java.util.*;
 
 public abstract class Piece {
     public enum Side{BLACK, WHITE};
@@ -9,6 +10,7 @@ public abstract class Piece {
     protected long topRow = 255L;
     protected long bottomRow = -72057594037927936L;
 
+    protected Stack<Long> moveHistory;
     protected long location;
     protected Side team;
     protected boolean isAlive;
@@ -101,9 +103,15 @@ public abstract class Piece {
         return move;
     }
     
+    //return either the default location of the piece if the stack is empty, or the most recent "current" location
     public long getLocation() {
-        return location;
+        if(moveHistoryEmpty()) {
+            return location;
+        } else {
+            return moveHistory.peek(); 
+        }
     }
+
     public void addLocation(long l) {
         location += l;
     }
@@ -118,6 +126,18 @@ public abstract class Piece {
 
     public long getPCaptures() {
         return potentialCaptures;
+    }
+
+    public boolean moveHistoryEmpty() {
+        return moveHistory.empty();
+    }
+
+    public void pushMove(long move) {
+        moveHistory.push(move);
+    }
+
+    public void popMove() {
+        moveHistory.pop();
     }
 
     public abstract long getMoveBoard(long piecesB, long piecesW, long i);

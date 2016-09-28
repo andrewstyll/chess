@@ -1,9 +1,11 @@
 package pieceDef;
 import java.util.Arrays;
+import java.util.Stack;
 
 public class Pawn extends Piece {
 
     public Pawn(Side s) {
+        moveHistory = new Stack<Long>();
         location = 0L;
         team = s;
         isAlive = true;
