@@ -15,7 +15,6 @@ public class Moves {
         showMoves(possibleMovesBlack(false));
     }
 
-
     public static void undoMoveAllPieces() {
         HashMap<Character, Piece> pieces = Board.getPieces();
         
@@ -25,6 +24,29 @@ public class Moves {
                 chessPiece.popMove();
             }
         }
+    }
+
+    private static int decodeMove(int move, int step) {
+        //use mask to mask off the first byte for the starting point
+        int xMask, yMask, pMask, x, y, promote;
+
+        if(step == 1) { //looking for x1 and y1
+            xMask = 0x0000000F;
+            yMask = 0x000000F0;
+            x = move&xMask;
+            y = ((move&yMask)>>4);
+        } else if(step == 2) {
+            xMask = 0x00000F00;
+            yMask = 0x0000F000;
+            x = ((move&xMask)>>8);
+            y = ((move&yMask)>>12);
+        } else { // step will equal 3
+            pMask = 0x00FF0000;
+            promote = ((move&pMask)>>16);
+            return promote;
+        }
+        
+        return (y*8+x);
     }
 
     //makes a move based on encoded input
@@ -59,17 +81,6 @@ public class Moves {
         
         return returnBoard;
     }
-   
-    //so every time a move is made I need a way of remembering the original location of the move so then when i
-    //evntually complete my alpha beta function, the pieces on my board haven't actually gone anywhere. but i need to
-    //store and access their "new" temporary locations. My idea is this:
-    //
-    //Each piece will have a stack that holds the temporary locations of the pieces. The top value of the stack will be
-    //the "current" location of the piece. The maximum stack size is 10 so this should be okay. so every time i undo a
-    //move, i'll just pop off the tops of every piece and the moves will be undone. 
-    //
-    //This is correct because every make move will push a new value on the stack, and every undo move will pop a value.
-    //If every make move is matched by an undo move, the stack should return to 0 when I return to the head
  
     public static void makeMoveAllPieces(int move) {
         HashMap<Character, Piece> pieces = Board.getPieces();
@@ -117,87 +128,16 @@ public class Moves {
         }
     }
    
-    //this should return all legal moves for white, AKA white should not put its king in check with any of these
-    public static int[] possibleMovesWhite(boolean whitesMove) {
-
-        HashMap<Character, Piece> pieces = Board.getPieces();
-
-        int[] pawnMoves = new int[MAX_MOVES];
-        int[] rookMoves = new int[MAX_MOVES];
-        int[] knightMoves = new int[MAX_MOVES];
-        int[] bishopMoves = new int[MAX_MOVES];
-        int[] queenMoves = new int[MAX_MOVES];
-        int[] kingMoves = new int[MAX_MOVES];
-
-        long piecesB = getBlackPosition(pieces);
-        long piecesW = getWhitePosition(pieces);
-        
-        pawnMoves = pieces.get('P').getMoves(piecesB, piecesW);
-        rookMoves = pieces.get('R').getMoves(piecesB, piecesW);
-        knightMoves = pieces.get('K').getMoves(piecesB, piecesW);
-        bishopMoves = pieces.get('B').getMoves(piecesB, piecesW);
-        queenMoves = pieces.get('Q').getMoves(piecesB, piecesW);
-        kingMoves = pieces.get('A').getMoves(piecesB, piecesW);
-    
-        return compileMoves(pawnMoves, rookMoves, knightMoves, bishopMoves, queenMoves, kingMoves, whitesMove);
-    }
-    
-    public static int[] possibleMovesBlack(boolean whitesMove) {
-        //whitesMove will always be false here won't it LOL
-
-        HashMap<Character, Piece> pieces = Board.getPieces();
-        
-        int[] pawnMoves = new int[MAX_MOVES];
-        int[] rookMoves = new int[MAX_MOVES];
-        int[] knightMoves = new int[MAX_MOVES];
-        int[] bishopMoves = new int[MAX_MOVES];
-        int[] queenMoves = new int[MAX_MOVES];
-        int[] kingMoves = new int[MAX_MOVES];
-        
-        long piecesB = getBlackPosition(pieces);
-        long piecesW = getWhitePosition(pieces);
-        
-        pawnMoves = pieces.get('p').getMoves(piecesB, piecesW);
-        rookMoves = pieces.get('r').getMoves(piecesB, piecesW);
-        knightMoves = pieces.get('k').getMoves(piecesB, piecesW);
-        bishopMoves = pieces.get('b').getMoves(piecesB, piecesW);
-        queenMoves = pieces.get('q').getMoves(piecesB, piecesW);
-        kingMoves = pieces.get('a').getMoves(piecesB, piecesW);
-
-        return compileMoves(pawnMoves, rookMoves, knightMoves, bishopMoves, queenMoves, kingMoves, whitesMove);
-    }
-    
-    static long getBlackPosition(HashMap<Character, Piece> pieces) {
-        long gBP = (pieces.get('p').getLocation() | pieces.get('r').getLocation() | pieces.get('k').getLocation() | 
-                    pieces.get('b').getLocation() | pieces.get('q').getLocation() | pieces.get('a').getLocation());
-        return gBP;
-    }
-
-    static long getWhitePosition(HashMap<Character, Piece> pieces) {
-        long gWP = (pieces.get('P').getLocation() | pieces.get('R').getLocation() | pieces.get('K').getLocation() | 
-                    pieces.get('B').getLocation() | pieces.get('Q').getLocation() | pieces.get('A').getLocation());
-        return gWP;
-    }
-
-    //captures only update when get move is called for each piece
-    //this is a final captrue zone after all of the moves are made. This isn't useful for eliminating bad moves from the
-    //board
-    static long getBlackCaptures(HashMap<Character, Piece> pieces) {
-        long gBC = (pieces.get('p').getPCaptures() | pieces.get('r').getPCaptures() | pieces.get('k').getPCaptures() | 
-                    pieces.get('b').getPCaptures() | pieces.get('q').getPCaptures() | pieces.get('a').getPCaptures());
-        return gBC;
-    }
-    
-    static long getWhiteCaptures(HashMap<Character, Piece> pieces) {
-        long gWC = (pieces.get('P').getPCaptures() | pieces.get('R').getPCaptures() | pieces.get('K').getPCaptures() | 
-                    pieces.get('B').getPCaptures() | pieces.get('Q').getPCaptures() | pieces.get('A').getPCaptures());
-        return gWC;
-    }
-
-    public static boolean kingSafety(int move, boolean whitesMove) {
+    //This function will first get a move, make the move, return the unsafe areas created by the move (the new enemy
+    //capture zones)
+    public static long captureBoard(int move, boolean whitesMove) {
         HashMap<Character, Piece> pieces = Board.getPieces();
         long unsafeBoard = 0L;
+        long wBoard = 0L, bBoard = 0L;
 
+        //TODO REFACTOR THIS FUNCTION
+
+        //I need a black board, a white board and all individual boards.
         Piece pawnW = pieces.get('P');
         Piece rookW = pieces.get('R');
         Piece knightW = pieces.get('K');
@@ -212,6 +152,7 @@ public class Moves {
         Piece queenB = pieces.get('q');
         Piece kingB = pieces.get('a');
 
+        //makeMove IS NOT changing the location of a piece it only returns the potential new location
         long PB = makeMove(move, pawnW.getLocation(), 0);
         long RB = makeMove(move, rookW.getLocation(), 1);
         long KB = makeMove(move, knightW.getLocation(), 2);
@@ -226,9 +167,9 @@ public class Moves {
         long qB = makeMove(move, queenB.getLocation(), 128);
         long aB = makeMove(move, kingB.getLocation(), 0);
 
-        long wBoard = PB | RB | KB | BB | QB | AB;
-        long bBoard = pB | rB | kB | bB | qB | aB;
-        //this is now the location of all of the peices on the board. Now I need to check their capture zones
+        wBoard = PB | RB | KB | BB | QB | AB;
+        bBoard = pB | rB | kB | bB | qB | aB;
+        //this is now the location of all of the pieces on the board. Now I need to check their capture zones
         //get all the potential moves for all of the black pieces.
         
         if(whitesMove) { //if it's white's move, get the black captures and AND them with the white king location
@@ -251,13 +192,6 @@ public class Moves {
                     unsafeBoard = unsafeBoard | kingB.getMoveBoard(bBoard, wBoard, i);
                 }
             }
-            
-            //if it's whites move, check the black pieces with whites board
-            if((unsafeBoard & kingW.getLocation()) == 0) {
-                return true;
-            } else {
-                return false;
-            }
         } else {
 
             unsafeBoard = unsafeBoard | pawnW.getMoveBoard(bBoard, wBoard, PB);
@@ -279,7 +213,26 @@ public class Moves {
                     unsafeBoard = unsafeBoard | kingW.getMoveBoard(bBoard, wBoard, i);
                 }
             }
-                
+        }
+        return unsafeBoard;
+    }
+
+    //Given a move and who's turn it is, this function will compare the postions of the kings to a board that contains
+    //all the opposing players capture zone squares. If the king is safe, it will return true, if it isn't it'll return
+    //false.
+    public static boolean kingSafety(int move, boolean whitesMove) {
+        HashMap<Character, Piece> pieces = Board.getPieces();
+        long unsafeBoard = captureBoard(move, whitesMove);
+        Piece kingW = pieces.get('A');
+        Piece kingB = pieces.get('a');
+        if(whitesMove) {
+            //if it's whites move, check the black pieces with whites board
+            if((unsafeBoard & kingW.getLocation()) == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
             if((unsafeBoard & kingB.getLocation()) == 0) {
                 return true;
             } else {
@@ -287,7 +240,6 @@ public class Moves {
             }
         }
     }
-    
     //only add to the array if the move will be safe for each colour's king
     private static int[] compileMoves(int[] p, int[] r, int[] k, int[] b, int[] q, int[] a, boolean whitesMove) {
         
@@ -347,29 +299,67 @@ public class Moves {
         return moves;
     }
 
-    private static int decodeMove(int move, int step) {
-        //use mask to mask off the first byte for the starting point
-        int xMask, yMask, pMask, x, y, promote;
-
-        if(step == 1) { //looking for x1 and y1
-            xMask = 0x0000000F;
-            yMask = 0x000000F0;
-            x = move&xMask;
-            y = ((move&yMask)>>4);
-        } else if(step == 2) {
-            xMask = 0x00000F00;
-            yMask = 0x0000F000;
-            x = ((move&xMask)>>8);
-            y = ((move&yMask)>>12);
-        } else { // step will equal 3
-            pMask = 0x00FF0000;
-            promote = ((move&pMask)>>16);
-            return promote;
-        }
-        
-        return (y*8+x);
+    static long getBlackPosition(HashMap<Character, Piece> pieces) {
+        long gBP = (pieces.get('p').getLocation() | pieces.get('r').getLocation() | pieces.get('k').getLocation() | 
+                    pieces.get('b').getLocation() | pieces.get('q').getLocation() | pieces.get('a').getLocation());
+        return gBP;
     }
 
+    static long getWhitePosition(HashMap<Character, Piece> pieces) {
+        long gWP = (pieces.get('P').getLocation() | pieces.get('R').getLocation() | pieces.get('K').getLocation() | 
+                    pieces.get('B').getLocation() | pieces.get('Q').getLocation() | pieces.get('A').getLocation());
+        return gWP;
+    }
+
+    public static int[] possibleMovesWhite(boolean whitesMove) {
+
+        HashMap<Character, Piece> pieces = Board.getPieces();
+
+        int[] pawnMoves = new int[MAX_MOVES];
+        int[] rookMoves = new int[MAX_MOVES];
+        int[] knightMoves = new int[MAX_MOVES];
+        int[] bishopMoves = new int[MAX_MOVES];
+        int[] queenMoves = new int[MAX_MOVES];
+        int[] kingMoves = new int[MAX_MOVES];
+
+        long piecesB = getBlackPosition(pieces);
+        long piecesW = getWhitePosition(pieces);
+        
+        pawnMoves = pieces.get('P').getMoves(piecesB, piecesW);
+        rookMoves = pieces.get('R').getMoves(piecesB, piecesW);
+        knightMoves = pieces.get('K').getMoves(piecesB, piecesW);
+        bishopMoves = pieces.get('B').getMoves(piecesB, piecesW);
+        queenMoves = pieces.get('Q').getMoves(piecesB, piecesW);
+        kingMoves = pieces.get('A').getMoves(piecesB, piecesW);
+    
+        return compileMoves(pawnMoves, rookMoves, knightMoves, bishopMoves, queenMoves, kingMoves, whitesMove);
+    }
+    
+    public static int[] possibleMovesBlack(boolean whitesMove) {
+        //whitesMove will always be false here won't it LOL
+
+        HashMap<Character, Piece> pieces = Board.getPieces();
+        
+        int[] pawnMoves = new int[MAX_MOVES];
+        int[] rookMoves = new int[MAX_MOVES];
+        int[] knightMoves = new int[MAX_MOVES];
+        int[] bishopMoves = new int[MAX_MOVES];
+        int[] queenMoves = new int[MAX_MOVES];
+        int[] kingMoves = new int[MAX_MOVES];
+        
+        long piecesB = getBlackPosition(pieces);
+        long piecesW = getWhitePosition(pieces);
+        
+        pawnMoves = pieces.get('p').getMoves(piecesB, piecesW);
+        rookMoves = pieces.get('r').getMoves(piecesB, piecesW);
+        knightMoves = pieces.get('k').getMoves(piecesB, piecesW);
+        bishopMoves = pieces.get('b').getMoves(piecesB, piecesW);
+        queenMoves = pieces.get('q').getMoves(piecesB, piecesW);
+        kingMoves = pieces.get('a').getMoves(piecesB, piecesW);
+
+        return compileMoves(pawnMoves, rookMoves, knightMoves, bishopMoves, queenMoves, kingMoves, whitesMove);
+    }
+    
     public static void showMoves(int[] moves) {
         for(int i = 0; i < MAX_MOVES; i++) {
             if(moves[i] != 0) {

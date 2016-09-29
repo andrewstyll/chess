@@ -7,8 +7,6 @@ public class Bishop extends Piece {
         moveHistory = new Stack<Long>();
         location = 0L;
         team = s;
-        isAlive = true;
-        potentialCaptures = 0L;
     }
     
     public long getMoveBoard(long piecesB, long piecesW, long i) {
@@ -30,13 +28,11 @@ public class Bishop extends Piece {
         int movesIndex = 0;
 
         long allPieces = piecesB | piecesW;
-        this.potentialCaptures = 0L;
 
         for(int i = 0; i < 64; i++) { //look through the location for every location on board for the rooks
             long bishopMoves = 0L;
             if (((location>>i) & 1) == 1) { //we have found a rook!
                 bishopMoves = getMoveBoard(piecesB, piecesW, i);
-                this.potentialCaptures |= bishopMoves;
                 for(int j = 0; j < 64; j++) {
                     if (((bishopMoves>>j) & 1) == 1) { //we have found a rook move!!
                         moves[movesIndex++] = encodeMove(i/8, i%8, j/8, j%8, ' ');

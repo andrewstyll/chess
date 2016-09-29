@@ -5,6 +5,8 @@ import pieceDef.*;
 public class Main {
     static int SCREEN_WIDTH = 550;
     static int SCREEN_HEIGHT = 570;
+    static int inf = Integer.MAX_VALUE;
+    static int infNeg = Integer.MIN_VALUE;
 
     static long powerOf2(int i) {
         long base = 1L;
@@ -20,6 +22,6 @@ public class Main {
         window.setVisible(true);*/
 
         Board.initBoard();
-        Moves.movesTest();
+        AlphaBeta.maxAlphaBeta(infNeg, inf, 0, true, 0);    
     }
 }

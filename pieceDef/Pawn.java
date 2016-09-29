@@ -8,8 +8,6 @@ public class Pawn extends Piece {
         moveHistory = new Stack<Long>();
         location = 0L;
         team = s;
-        isAlive = true;
-        potentialCaptures = 0L;
     }
 
     public long getMoveBoard(long piecesB, long piecesW, long i) {
@@ -37,7 +35,6 @@ public class Pawn extends Piece {
         long uBoard = 0L, u2Board = 0L, cRBoard = 0L, cLBoard = 0L;
         
         long allPieces = piecesB | piecesW;
-        this.potentialCaptures = 0L;
 
         if(this.team == Side.WHITE) {
             //move up
@@ -145,7 +142,6 @@ public class Pawn extends Piece {
             cLBoard = (location<<7) &~ rSide;
         }
 
-        this.potentialCaptures |= cRBoard | cLBoard;
         
         return moves;   
     }

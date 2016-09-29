@@ -16,7 +16,7 @@ public class Board {
         {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
         {'R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R'},
     };
-    
+
     public static void initBoard() {
         initPieces();
         charBoardToBitBoard();

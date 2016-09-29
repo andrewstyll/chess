@@ -13,8 +13,6 @@ public abstract class Piece {
     protected Stack<Long> moveHistory;
     protected long location;
     protected Side team;
-    protected boolean isAlive;
-    protected long potentialCaptures; //all the potential moves where an opposing piece would be in danger
 
     //keep in mind, should match the system used by the board
     private long[] verticalMask = {
@@ -120,12 +118,16 @@ public abstract class Piece {
         return team;
     }
 
-    public boolean getAlive() {
-        return isAlive;
-    }
-
-    public long getPCaptures() {
-        return potentialCaptures;
+    //i need this to update with the current location, so I can't really store it unless i want to use a stack..
+    public int getPieceCount() {
+        int count = 0;
+        long board = getLocation();
+        for(int i = 0; i < 64; i++) {
+            if(((board>>i) & 1) == 1) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public boolean moveHistoryEmpty() {
@@ -140,6 +142,8 @@ public abstract class Piece {
         moveHistory.pop();
     }
 
+    //This returns a bitboard storing all of the potential locations a piece can move to  
     public abstract long getMoveBoard(long piecesB, long piecesW, long i);
+    //These are all the moves that can be made for a certain piece
     public abstract int[] getMoves(long a, long b);
 }
