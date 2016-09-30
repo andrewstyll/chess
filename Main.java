@@ -22,6 +22,6 @@ public class Main {
         window.setVisible(true);*/
 
         Board.initBoard();
-        AlphaBeta.maxAlphaBeta(infNeg, inf, 0, true, 0);    
+        System.out.println("final score = " + AlphaBeta.maxAlphaBeta(infNeg, inf, 0, true, 0));    
     }
 }
