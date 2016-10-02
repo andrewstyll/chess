@@ -7,6 +7,8 @@ public class Main {
     static int SCREEN_HEIGHT = 570;
     static int inf = Integer.MAX_VALUE;
     static int infNeg = Integer.MIN_VALUE;
+    static int CHECK_MATE = 10000;
+    
 
     static long powerOf2(int i) {
         long base = 1L;

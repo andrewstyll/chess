@@ -6,55 +6,79 @@ public class Rating {
     //credit to chessprogramming.wikispaces.com/Simplified+evaluation+function for the rating board. And pretty much
     //everything else in the whole project
 
-    //check how safe each piece is
-    public static int ratePieceSafeness() {
+    //for each peice, see if it can be captured
+    public static int ratePieceSafeness(boolean whitesMove) {
         //I need a board of all unsafe areas on the chessboard. To do this i need to know who's turn it is
         HashMap<Character, Piece> pieces = Board.getPieces();
-        long captureBoard;
+        long wUnsafeBoard = 0L, bUnsafeBoard = 0L; //wCaptureBoard = where white pieces are in danger, bCaptureBoard = where black pieces are in danger
+        int pointCount = 0;
+
+        wUnsafeBoard = Moves.getUnsafeBoard(0, true);
+        bUnsafeBoard = Moves.getUnsafeBoard(0, false);
 
         for(Map.Entry<Character, Piece> entry : pieces.entrySet()) {
             char key = entry.getKey();
             Piece chessPiece = entry.getValue();
-
-            
-
-        //every time i make a move i check to see what each piece can capture SO the question is. Was a move just made
-        //before we get in here? and was it the correct move? They are being done every time the possible moves are
-        //gathered. I need the captures for each move. AKA this needs to be done every time i make a move.
-
-
-        //SO how do I do this? This depends on the current locations of every Piece. Every Piece should have a get
-        //captures function that determines where it can capture something
-            switch(key) {
-                case 'P':
-                    break;
-                case 'R':
-                    break;
-                case 'K':
-                    break;
-                case 'B':
-                    break;
-                case 'Q':
-                    break;
-                case 'A':
-                    break;
-                
-                case 'p':
-                    break;
-                case 'r':
-                    break;
-                case 'k':
-                    break;
-                case 'b':
-                    break;
-                case 'q':
-                    break;
-                case 'a':
-                    break;
+           
+            if(whitesMove) {
+                if(chessPiece.getSide() == Piece.Side.WHITE) {
+                    if(( wUnsafeBoard & chessPiece.getLocation()) == 0) {
+                        continue;            
+                    } else {
+                        switch(key) {
+                            case 'P':
+                                pointCount -= 100;        
+                                break;
+                            case 'R':
+                                pointCount -= 500;       
+                                break;
+                            case 'K':
+                                pointCount -= 300;       
+                                break;
+                            case 'B':
+                                pointCount -= 300;       
+                                break;
+                            case 'Q':
+                                pointCount -= 900;        
+                                break;
+                            case 'A':
+                                pointCount -= 200;        
+                                break;
+                        } 
+                    }
+                }
+            } else {
+                if(chessPiece.getSide() == Piece.Side.BLACK) {
+                    if(( bUnsafeBoard & chessPiece.getLocation()) == 0) {
+                        continue;            
+                    } else {
+                        switch(key) {
+                            case 'p':
+                                pointCount -= 100;        
+                                break;
+                            case 'r':
+                                pointCount -= 500;      
+                                break;
+                            case 'k':
+                                pointCount -= 300;       
+                                break;
+                            case 'b':
+                                pointCount -= 300;       
+                                break;
+                            case 'q':
+                                pointCount -= 900;        
+                                break;
+                            case 'a':
+                                pointCount -= 200;        
+                                break;
+                        } 
+                    }
+                }
             }
         }
-        return 0;
+        return pointCount/2;
     }
+
     //collects the material value of all of the pieces on the chessBoard
     public static int rateBoardValue() {
         HashMap<Character, Piece> pieces = Board.getPieces();
@@ -83,19 +107,19 @@ public class Rating {
                     pointCount += pieceCount*900;
                     break;
                 case 'p':
-                    pointCount += pieceCount*100;
+                    pointCount -= pieceCount*100;
                     break;
                 case 'r':
-                    pointCount += pieceCount*500;
+                    pointCount -= pieceCount*500;
                     break;
                 case 'k':
-                    pointCount += pieceCount*300;
+                    pointCount -= pieceCount*300;
                     break;
                 case 'b':
-                    pointCount += (pieceCount == 2 ? pieceCount * 300 : pieceCount * 250); 
+                    pointCount -= (pieceCount == 2 ? pieceCount * 300 : pieceCount * 250); 
                     break;
                 case 'q':
-                    pointCount += pieceCount*900;
+                    pointCount -= pieceCount*900;
                     break;
             }
         }
@@ -106,7 +130,7 @@ public class Rating {
         int pointCount = 0;
         pointCount += numMoves*5; //5 pointes per valid move
         if(numMoves == 0) { // if we're in check or somethign that's bad so minus a billion points
-            pointCount += -100000;
+            pointCount += (-1)*Main.CHECK_MATE;
         }
         return pointCount;
     }
@@ -153,23 +177,23 @@ public class Rating {
                         
                         case 'p':
                             pRB = true;
-                            pointCount += RatingBoard.pBoardW[7-(i/8)][7-(i%8)];
+                            pointCount -= RatingBoard.pBoardW[7-(i/8)][7-(i%8)];
                             break;
                         case 'r':
                             pRB = true;
-                            pointCount += RatingBoard.rBoardW[7-(i/8)][7-(i%8)];
+                            pointCount -= RatingBoard.rBoardW[7-(i/8)][7-(i%8)];
                             break;
                         case 'k':
                             mPB++;
-                            pointCount += RatingBoard.kBoardW[7-(i/8)][7-(i%8)];
+                            pointCount -= RatingBoard.kBoardW[7-(i/8)][7-(i%8)];
                             break;
                         case 'b':
                             mPB++;
-                            pointCount += RatingBoard.bBoardW[7-(i/8)][7-(i%8)];
+                            pointCount -= RatingBoard.bBoardW[7-(i/8)][7-(i%8)];
                             break;
                         case 'q':
                             hasQueenB = true;
-                            pointCount += RatingBoard.qBoardW[7-(i/8)][7-(i%8)];
+                            pointCount -= RatingBoard.qBoardW[7-(i/8)][7-(i%8)];
                             break;
                         case 'a':
                             kingPositionB = i;
@@ -183,25 +207,25 @@ public class Rating {
         //Every side which has a queen has additionally no other pieces or one minorpiece
         if( ((hasQueenW && (!pRW && mPW < 2)) || (hasQueenB && (!pRB && mPB > 1))) || (!hasQueenW && !hasQueenB) ) {
             //END BOARD
-            pointCount += RatingBoard.aEndBoardW[kingPositionW/8][kingPositionW%8];
-            pointCount += RatingBoard.aEndBoardW[7-(kingPositionB/8)][7-(kingPositionB%8)];
+            pointCount += RatingBoard.aEndBoardW[kingPositionW/8][kingPositionW%8]; //White
+            pointCount -= RatingBoard.aEndBoardW[7-(kingPositionB/8)][7-(kingPositionB%8)];//Black
         } else {
             //MID BOARD
             pointCount += RatingBoard.aMidBoardW[kingPositionW/8][kingPositionW%8];
-            pointCount += RatingBoard.aMidBoardW[7-(kingPositionB/8)][7-(kingPositionB%8)];
+            pointCount -= RatingBoard.aMidBoardW[7-(kingPositionB/8)][7-(kingPositionB%8)];
         }
         return pointCount;
     }
     
-    public static int evaluate(int[] moves) {
+    public static int evaluate(int[] moves, boolean whitesMove) {
         int pointCount = 0;
 
-/*        //Sum my stuff and subtract the other guys stuff somehow
+        //Sum my stuff and subtract the other guys stuff somehow
         pointCount += rateBoardPosition();
-        pointCount += ratePieceSafeness();
-        pointCount += rateMoveOptions(int ); //pass in the number of moves in here
+        pointCount += ratePieceSafeness(whitesMove);
+        pointCount += rateMoveOptions(Moves.getNumMoves(moves)); //pass in the number of moves in here
         pointCount += rateBoardValue();
-*/
-        return pointCount;
+
+        return whitesMove == true ? pointCount:(-1)*pointCount;
     }
 }

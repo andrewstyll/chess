@@ -9,10 +9,40 @@ import pieceDef.*;
 public class Moves {
 
     static int MAX_MOVES = 218; //this is supposed to be the maximum number of moves for any position
-   
-    public static void movesTest() {
-        showMoves(possibleMovesWhite(true));
-        showMoves(possibleMovesBlack(false));
+
+    public static int getNumMoves(int[] moves) {
+        int numMoves = 0;
+        for(int i = 0; i < MAX_MOVES; i++) {
+            if(moves[i] == 0) {
+                break;
+            } else {
+                numMoves++;
+            }
+        }
+        return numMoves;
+    }
+
+    static int determinePromo(char key) {
+        switch(key) {
+            case 'R':
+                return 1;
+            case 'K':
+                return 2;
+            case 'B':
+                return 4;
+            case 'Q':
+                return 8;
+            case 'r':
+                return 16;
+            case 'k':
+                return 32;
+            case 'b':
+                return 64;
+            case 'q':
+                return 128;
+            default:
+                return 0;
+        }
     }
 
     public static void undoMoveAllPieces() {
@@ -90,36 +120,7 @@ public class Moves {
         for(Map.Entry<Character, Piece> entry : pieces.entrySet()) {
             char key = entry.getKey();
             Piece chessPiece = entry.getValue();
-            
-            switch(key) {
-                case 'R':
-                    promo = 1;
-                    break;
-                case 'K':
-                    promo = 2;
-                    break;
-                case 'B':
-                    promo = 4;
-                    break;
-                case 'Q':
-                    promo = 8;
-                    break;
-                case 'r':
-                    promo = 16;
-                    break;
-                case 'k':
-                    promo = 32;
-                    break;
-                case 'b':
-                    promo = 64;
-                    break;
-                case 'q':
-                    promo = 128;
-                    break;
-                default:
-                    promo = 0;
-                    break;
-            }
+            promo = determinePromo(key); 
             newLocation = makeMove(move, chessPiece.getLocation(), promo);
             chessPiece.pushMove(newLocation);
         
@@ -128,89 +129,65 @@ public class Moves {
         }
     }
    
-    //This function will first get a move, make the move, return the unsafe areas created by the move (the new enemy
-    //capture zones)
-    public static long captureBoard(int move, boolean whitesMove) {
-        HashMap<Character, Piece> pieces = Board.getPieces();
+    static long createUnsafeBoard(long location, long wBoard, long bBoard, Piece p) {
         long unsafeBoard = 0L;
+
+        for(long i = 0; i < 64; i++) {
+            if(((location>>i) & 1) == 1) {
+                unsafeBoard = unsafeBoard | p.getMoveBoard(bBoard, wBoard, i);
+            }
+        }
+        return unsafeBoard;
+    }
+
+    //upon being given a move and a turn, this function will make the move, then compile a board of all dangerous
+    //squares given that first move. If no move is given, then the unsafe locations are given given 
+    public static long getUnsafeBoard(int move, boolean whitesMove) {
+        HashMap<Character, Piece> pieces = Board.getPieces();
+        long unsafeBoard = 0L, tmpBoard = 0L;
         long wBoard = 0L, bBoard = 0L;
 
-        //TODO REFACTOR THIS FUNCTION
+        //this part determines the new locations of each piece after a move and stores them all together
+        for(Map.Entry<Character, Piece> entry : pieces.entrySet()) {
+            char key = entry.getKey();
+            Piece chessPiece = entry.getValue();
 
-        //I need a black board, a white board and all individual boards.
-        Piece pawnW = pieces.get('P');
-        Piece rookW = pieces.get('R');
-        Piece knightW = pieces.get('K');
-        Piece bishopW = pieces.get('B');
-        Piece queenW = pieces.get('Q');
-        Piece kingW = pieces.get('A');
-
-        Piece pawnB = pieces.get('p');
-        Piece rookB = pieces.get('r');
-        Piece knightB = pieces.get('k');
-        Piece bishopB = pieces.get('b');
-        Piece queenB = pieces.get('q');
-        Piece kingB = pieces.get('a');
-
-        //makeMove IS NOT changing the location of a piece it only returns the potential new location
-        long PB = makeMove(move, pawnW.getLocation(), 0);
-        long RB = makeMove(move, rookW.getLocation(), 1);
-        long KB = makeMove(move, knightW.getLocation(), 2);
-        long BB = makeMove(move, bishopW.getLocation(), 4);
-        long QB = makeMove(move, queenW.getLocation(), 8);
-        long AB = makeMove(move, kingW.getLocation(), 0);
-
-        long pB = makeMove(move, pawnB.getLocation(), 0);
-        long rB = makeMove(move, rookB.getLocation(), 16);
-        long kB = makeMove(move, knightB.getLocation(), 32);
-        long bB = makeMove(move, bishopB.getLocation(), 64);
-        long qB = makeMove(move, queenB.getLocation(), 128);
-        long aB = makeMove(move, kingB.getLocation(), 0);
-
-        wBoard = PB | RB | KB | BB | QB | AB;
-        bBoard = pB | rB | kB | bB | qB | aB;
-        //this is now the location of all of the pieces on the board. Now I need to check their capture zones
-        //get all the potential moves for all of the black pieces.
-        
-        if(whitesMove) { //if it's white's move, get the black captures and AND them with the white king location
-            unsafeBoard = unsafeBoard | pawnB.getMoveBoard(bBoard, wBoard, pB);
-
-            for(long i = 0; i < 64; i++) {
-                if(((rB>>i) & 1) == 1) {
-                    unsafeBoard = unsafeBoard | rookB.getMoveBoard(bBoard, wBoard, i);
-                }
-                if(((bB>>i) & 1) == 1) {
-                    unsafeBoard = unsafeBoard | bishopB.getMoveBoard(bBoard, wBoard, i);
-                }
-                if(((qB>>i) & 1) == 1) {
-                    unsafeBoard = unsafeBoard | queenB.getMoveBoard(bBoard, wBoard, i);
-                }
-                if(((kB>>i) & 1) == 1) {
-                    unsafeBoard = unsafeBoard | knightB.getMoveBoard(bBoard, wBoard, i);
-                }
-                if(((aB>>i) & 1) == 1) {
-                    unsafeBoard = unsafeBoard | kingB.getMoveBoard(bBoard, wBoard, i);
-                }
+            if(move == 0) {
+                tmpBoard = makeMove(move, chessPiece.getLocation(), determinePromo(key));
+            } else {
+                tmpBoard = chessPiece.getLocation();
             }
-        } else {
+            if(chessPiece.getSide() == Piece.Side.WHITE) {
+                wBoard |= tmpBoard;
+            } else {
+                bBoard |= tmpBoard;
+            }
+        }
 
-            unsafeBoard = unsafeBoard | pawnW.getMoveBoard(bBoard, wBoard, PB);
-
-            for(long i = 0; i < 64; i++) {
-                if(((RB>>i) & 1) == 1) {
-                    unsafeBoard = unsafeBoard | rookW.getMoveBoard(bBoard, wBoard, i);
+        for(Map.Entry<Character, Piece> entry : pieces.entrySet()) {
+            char key = entry.getKey();
+            Piece chessPiece = entry.getValue();
+            
+            if(move == 0) {
+                tmpBoard = makeMove(move, chessPiece.getLocation(), determinePromo(key));
+            } else {
+                tmpBoard = chessPiece.getLocation();
+            }
+            if(whitesMove) { //If it's whites move, get the black moves as the unsafe board
+                if(chessPiece.getSide() == Piece.Side.BLACK) {
+                    if(key == 'p' || key == 'P' ) {
+                        unsafeBoard |= chessPiece.getMoveBoard(bBoard, wBoard, tmpBoard);
+                    } else {
+                        unsafeBoard |= createUnsafeBoard(tmpBoard, wBoard, bBoard, chessPiece); 
+                    }
                 }
-                if(((BB>>i) & 1) == 1) {
-                    unsafeBoard = unsafeBoard | bishopW.getMoveBoard(bBoard, wBoard, i);
-                }
-                if(((QB>>i) & 1) == 1) {
-                    unsafeBoard = unsafeBoard | queenW.getMoveBoard(bBoard, wBoard, i);
-                }
-                if(((KB>>i) & 1) == 1) {
-                    unsafeBoard = unsafeBoard | knightW.getMoveBoard(bBoard, wBoard, i);
-                }
-                if(((AB>>i) & 1) == 1) {
-                    unsafeBoard = unsafeBoard | kingW.getMoveBoard(bBoard, wBoard, i);
+            } else { // if it's blacks move, get the white moves as the unsafe board
+                if(chessPiece.getSide() == Piece.Side.WHITE) {
+                    if(key == 'p'|| key == 'P' ) {
+                        unsafeBoard |= chessPiece.getMoveBoard(bBoard, wBoard, tmpBoard);
+                    } else {
+                        unsafeBoard |= createUnsafeBoard(tmpBoard, wBoard, bBoard, chessPiece);
+                    }
                 }
             }
         }
@@ -222,7 +199,7 @@ public class Moves {
     //false.
     public static boolean kingSafety(int move, boolean whitesMove) {
         HashMap<Character, Piece> pieces = Board.getPieces();
-        long unsafeBoard = captureBoard(move, whitesMove);
+        long unsafeBoard = getUnsafeBoard(move, whitesMove);
         Piece kingW = pieces.get('A');
         Piece kingB = pieces.get('a');
         if(whitesMove) {
@@ -360,6 +337,11 @@ public class Moves {
         return compileMoves(pawnMoves, rookMoves, knightMoves, bishopMoves, queenMoves, kingMoves, whitesMove);
     }
     
+    public static void movesTest() {
+        showMoves(possibleMovesWhite(true));
+        showMoves(possibleMovesBlack(false));
+    }
+
     public static void showMoves(int[] moves) {
         for(int i = 0; i < MAX_MOVES; i++) {
             if(moves[i] != 0) {

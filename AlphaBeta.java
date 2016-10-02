@@ -4,14 +4,14 @@ class AlphaBeta {
      
     static int MAX_DEPTH = 4;
   
+  //TODO::COME UP WITH A CORRECT WAY OF REPRESENTING YOUR MOVES AND THE SCORE TOGETHER
   //beta = must be at least this good, alpha means too good. Use hard cut
     static int maxAlphaBeta(int alpha, int beta, int depth, boolean whitesMove, int move) {
         int score, moveIndex; //this will be the score of the best move and the index of the best move in the moves array;
         int[] moves = new int[Moves.MAX_MOVES];   
 
         if(depth == MAX_DEPTH) {
-            //return Rating.evaluate(moves);
-            return 0;
+            return Rating.evaluate(moves, whitesMove);
         }
 
         if(whitesMove) { //if it's whites turn get white moves
@@ -23,8 +23,7 @@ class AlphaBeta {
         //we've hit a checkmate
         if(moves[0] == 0) {
             //that means no moves were ever initialised so this must be a checkmate
-            //return //return a checkmate rating here;
-            return 0;
+            return whitesMove == true ? Main.CHECK_MATE : (-1)*Main.CHECK_MATE;
         }
 
         for(int i = 0; i < Moves.MAX_MOVES; i++) {
@@ -50,8 +49,7 @@ class AlphaBeta {
         int[] moves = new int[Moves.MAX_MOVES];   
         
         if(depth == MAX_DEPTH) {
-            //return Rating.evaluate(moves);
-            return 0;
+            return Rating.evaluate(moves, whitesMove);
         }
 
         if(whitesMove) { //if it's whites turn get white moves
@@ -63,7 +61,7 @@ class AlphaBeta {
         //we've hit a checkmate
         if(moves[0] == 0) {
             //that means no moves were ever initialised so this must be a checkmate
-            //return //return a checkmate rating here;
+            return whitesMove == true ? Main.CHECK_MATE : (-1)*Main.CHECK_MATE;
         }
 
         for(int i = 0; i < Moves.MAX_MOVES; i++) {
