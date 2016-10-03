@@ -14,6 +14,21 @@ public class Main {
         long base = 1L;
         return (base << i);
     }
+
+    static int[] encodeMAS(int move, int score) {
+        int[] MAS = new int[2];
+        MAS[0] = move;
+        MAS[1] = score;
+        return MAS;
+    }
+
+    static int decodeMASMove(int[] MAS) {
+        return MAS[0];
+    }
+   
+    static int decodeMASScore(int[] MAS) {
+        return MAS[1];
+    }
     
     public static void main(String[] args) {
         /*JFrame window = new JFrame("ChessBot-1");
@@ -23,7 +38,10 @@ public class Main {
         window.add(ui);
         window.setVisible(true);*/
 
+        int[] MAS = new int[2];
+
         Board.initBoard();
-        System.out.println("final score = " + AlphaBeta.maxAlphaBeta(infNeg, inf, 0, true, 0));    
+        MAS = AlphaBeta.maxAlphaBeta(infNeg, inf, 0, true, 0);
+        System.out.println("final score = " + decodeMASScore(MAS));
     }
 }

@@ -217,7 +217,7 @@ public class Rating {
         return pointCount;
     }
     
-    public static int evaluate(int[] moves, boolean whitesMove) {
+    public static int evaluate(int[] moves, boolean whitesMove, int depth) {
         int pointCount = 0;
 
         //Sum my stuff and subtract the other guys stuff somehow
@@ -226,6 +226,8 @@ public class Rating {
         pointCount += rateMoveOptions(Moves.getNumMoves(moves)); //pass in the number of moves in here
         pointCount += rateBoardValue();
 
-        return whitesMove == true ? pointCount:(-1)*pointCount;
+        //System.out.println(pointCount);
+
+        return whitesMove == true ? pointCount+(50*depth):(-1)*pointCount+(50*depth);
     }
 }

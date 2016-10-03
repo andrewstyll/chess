@@ -37,7 +37,6 @@ public class Board {
         pieces.put('A', new King(Piece.Side.WHITE));
     }
 
-    //static void charBoardToBitBoard(char[][] charBoard, long wPawn, long bPawn, long wKnight, long bKnight, wBishop, bBishop, wRook, bRook, wQueen, bQueen, wKing, bKing);
     static void charBoardToBitBoard() {
         Piece tmpPiece;
         for(int i = 0; i < 64; i++) {
