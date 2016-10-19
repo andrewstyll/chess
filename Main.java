@@ -31,17 +31,27 @@ public class Main {
     }
     
     public static void main(String[] args) {
-        /*JFrame window = new JFrame("ChessBot-1");
+        Board.initBoard();
+
+        System.out.println("1"); 
+        
+        JFrame window = new JFrame("ChessBot-1");
         UI ui = new UI();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         window.add(ui);
-        window.setVisible(true);*/
+        window.setVisible(true);
 
         int[] MAS = new int[2];
 
-        Board.initBoard();
-        MAS = AlphaBeta.maxAlphaBeta(infNeg, inf, 0, true, 0);
-        System.out.println("final score = " + decodeMASScore(MAS));
+        Object[] option = {"Computer", "Human"};
+        
+        System.out.println("2"); 
+
+        //Board.initBoard();
+        //MAS = AlphaBeta.maxAlphaBeta(infNeg, inf, 0, true, 0);
+        //System.out.println("final score = " + decodeMASScore(MAS));
+        //window.repaint(); 
+        System.out.println("3"); 
     }
 }
