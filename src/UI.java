@@ -1,3 +1,4 @@
+package src;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -28,7 +29,6 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
             }
         }
         
-        //Image chessPiecesImage = new ImageIcon("Assets/ChessPieces.png").getImage();
         Image chessPiecesImage = new ImageIcon("Assets/Chess.png").getImage();
      
         //look through every piece and set a j and k value for each one
@@ -90,7 +90,21 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
         }
     }
 
-    public void mouseReleased(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {
+        if(e.getX() < 8*squareWidth && e.getY() < 8*squareWidth) {
+            mouseY2 = e.getY();
+            mouseX2 = e.getX();
+
+            if(e.getButton() == MouseEvent.BUTTON1) {
+                //record the move
+                //if(pawn capture) else normal move
+                //
+                //if this is also a valid move, make the move for real.
+                //now make the bot move.
+            }
+        }
+
+    }
 
     public void mouseClicked(MouseEvent e) {}
 

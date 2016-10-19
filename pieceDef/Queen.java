@@ -1,5 +1,6 @@
 package pieceDef;
 import java.util.Stack;
+import src.*;
 
 public class Queen extends Piece {
 
@@ -35,7 +36,7 @@ public class Queen extends Piece {
                 queenMoves = getMoveBoard(piecesB, piecesW, (long)i);
                 for(int j = 0; j < 64; j++) {
                     if (((queenMoves>>j) & 1) == 1) { //we have found a rook move!!
-                        moves[movesIndex++] = encodeMove(i/8, i%8, j/8, j%8, ' ');
+                        moves[movesIndex++] = Moves.encodeMove(i/8, i%8, j/8, j%8, ' ');
                     }
                 }
             }

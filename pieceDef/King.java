@@ -1,6 +1,7 @@
 package pieceDef;
 import java.util.Arrays;
 import java.util.Stack;
+import src.*;
 
 public class King extends Piece {
 
@@ -51,7 +52,7 @@ public class King extends Piece {
                 kingMoves = getMoveBoard(piecesB, piecesW, (long)i);
                 for(int j = 0; j < 64; j++) {
                     if (((kingMoves>>j) & 1) == 1) { //we have found a king move!!
-                        moves[movesIndex++] = encodeMove(i/8, i%8, j/8, j%8, ' ');
+                        moves[movesIndex++] = Moves.encodeMove(i/8, i%8, j/8, j%8, ' ');
                     }
                 }
             }

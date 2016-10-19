@@ -1,5 +1,8 @@
+package src;
+
 import java.util.*;
 import javax.swing.*;
+
 import pieceDef.*;
 
 public class Main {
@@ -31,27 +34,29 @@ public class Main {
     }
     
     public static void main(String[] args) {
-        Board.initBoard();
 
-        System.out.println("1"); 
-        
+        ImageIcon icon = new ImageIcon("Assets/Icon.png");
+
         JFrame window = new JFrame("ChessBot-1");
         UI ui = new UI();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         window.add(ui);
         window.setVisible(true);
-
+        
+        Board.initBoard();
         int[] MAS = new int[2];
 
-        Object[] option = {"Computer", "Human"};
-        
-        System.out.println("2"); 
 
-        //Board.initBoard();
-        //MAS = AlphaBeta.maxAlphaBeta(infNeg, inf, 0, true, 0);
-        //System.out.println("final score = " + decodeMASScore(MAS));
-        //window.repaint(); 
-        System.out.println("3"); 
+        Object[] option = {"You", "Bot"};
+        int botIsWhite = JOptionPane.showOptionDialog(null, "Who will be playing as white?", "ChessBot-1", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon, option, option[0]);
+
+        if(botIsWhite == 1) {
+            System.out.println("3"); 
+            MAS = AlphaBeta.maxAlphaBeta(infNeg, inf, 0, true, 0);
+            //now make the move here
+            //System.out.println("final score = " + decodeMASScore(MAS));
+            window.repaint();
+        }
     }
 }

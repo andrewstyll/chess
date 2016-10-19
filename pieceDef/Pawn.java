@@ -1,6 +1,7 @@
 package pieceDef;
 import java.util.Arrays;
 import java.util.Stack;
+import src.*;
 
 public class Pawn extends Piece {
 
@@ -48,16 +49,16 @@ public class Pawn extends Piece {
             
             for(int i = 0; i < 64; i++) {
                 if(((uBoard>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(i/8+1, i%8, i/8, i%8, ' ');
+                    moves[movesIndex++] = Moves.encodeMove(i/8+1, i%8, i/8, i%8, ' ');
                 }
                 if(((u2Board>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(i/8+2, i%8, i/8, i%8, ' ');
+                    moves[movesIndex++] = Moves.encodeMove(i/8+2, i%8, i/8, i%8, ' ');
                 }
                 if(((cRBoard>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(i/8+1, i%8-1, i/8, i%8, ' ');
+                    moves[movesIndex++] = Moves.encodeMove(i/8+1, i%8-1, i/8, i%8, ' ');
                 }
                 if(((cLBoard>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(i/8+1, i%8+1, i/8, i%8, ' ');
+                    moves[movesIndex++] = Moves.encodeMove(i/8+1, i%8+1, i/8, i%8, ' ');
                 }
             }
         
@@ -67,22 +68,22 @@ public class Pawn extends Piece {
        
             for(int i = 0; i < 64; i++) {
                 if(((uBoard>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(1, i%8, 0, i%8, 'Q');
-                    moves[movesIndex++] = encodeMove(1, i%8, 0, i%8, 'R');
-                    moves[movesIndex++] = encodeMove(1, i%8, 0, i%8, 'B');
-                    moves[movesIndex++] = encodeMove(1, i%8, 0, i%8, 'K');
+                    moves[movesIndex++] = Moves.encodeMove(1, i%8, 0, i%8, 'Q');
+                    moves[movesIndex++] = Moves.encodeMove(1, i%8, 0, i%8, 'R');
+                    moves[movesIndex++] = Moves.encodeMove(1, i%8, 0, i%8, 'B');
+                    moves[movesIndex++] = Moves.encodeMove(1, i%8, 0, i%8, 'K');
                 }
                 if(((cRBoard>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(1, i%8-1, 0, i%8, 'Q');
-                    moves[movesIndex++] = encodeMove(1, i%8-1, 0, i%8, 'R');
-                    moves[movesIndex++] = encodeMove(1, i%8-1, 0, i%8, 'B');
-                    moves[movesIndex++] = encodeMove(1, i%8-1, 0, i%8, 'K');
+                    moves[movesIndex++] = Moves.encodeMove(1, i%8-1, 0, i%8, 'Q');
+                    moves[movesIndex++] = Moves.encodeMove(1, i%8-1, 0, i%8, 'R');
+                    moves[movesIndex++] = Moves.encodeMove(1, i%8-1, 0, i%8, 'B');
+                    moves[movesIndex++] = Moves.encodeMove(1, i%8-1, 0, i%8, 'K');
                 }
                 if(((cLBoard>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(1, i%8+1, 0, i%8, 'Q');
-                    moves[movesIndex++] = encodeMove(1, i%8+1, 0, i%8, 'R');
-                    moves[movesIndex++] = encodeMove(1, i%8+1, 0, i%8, 'B');
-                    moves[movesIndex++] = encodeMove(1, i%8+1, 0, i%8, 'K');
+                    moves[movesIndex++] = Moves.encodeMove(1, i%8+1, 0, i%8, 'Q');
+                    moves[movesIndex++] = Moves.encodeMove(1, i%8+1, 0, i%8, 'R');
+                    moves[movesIndex++] = Moves.encodeMove(1, i%8+1, 0, i%8, 'B');
+                    moves[movesIndex++] = Moves.encodeMove(1, i%8+1, 0, i%8, 'K');
                 }
             }
 
@@ -100,16 +101,16 @@ public class Pawn extends Piece {
             
             for(int i = 0; i < 64; i++) {
                 if(((uBoard>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(i/8-1, i%8, i/8, i%8, ' ');
+                    moves[movesIndex++] = Moves.encodeMove(i/8-1, i%8, i/8, i%8, ' ');
                 }
                 if(((u2Board>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(i/8-2, i%8, i/8, i%8, ' ');
+                    moves[movesIndex++] = Moves.encodeMove(i/8-2, i%8, i/8, i%8, ' ');
                 }
                 if(((cRBoard>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(i/8-1, i%8-1, i/8, i%8, ' ');
+                    moves[movesIndex++] = Moves.encodeMove(i/8-1, i%8-1, i/8, i%8, ' ');
                 }
                 if(((cLBoard>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(i/8-1, i%8+1, i/8, i%8, ' ');
+                    moves[movesIndex++] = Moves.encodeMove(i/8-1, i%8+1, i/8, i%8, ' ');
                 }
             }
         
@@ -119,22 +120,22 @@ public class Pawn extends Piece {
             
             for(int i = 0; i < 64; i++) {
                 if(((uBoard>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(6, i%8, 7, i%8, 'q');
-                    moves[movesIndex++] = encodeMove(6, i%8, 7, i%8, 'r');
-                    moves[movesIndex++] = encodeMove(6, i%8, 7, i%8, 'b');
-                    moves[movesIndex++] = encodeMove(6, i%8, 7, i%8, 'k');
+                    moves[movesIndex++] = Moves.encodeMove(6, i%8, 7, i%8, 'q');
+                    moves[movesIndex++] = Moves.encodeMove(6, i%8, 7, i%8, 'r');
+                    moves[movesIndex++] = Moves.encodeMove(6, i%8, 7, i%8, 'b');
+                    moves[movesIndex++] = Moves.encodeMove(6, i%8, 7, i%8, 'k');
                 }
                 if(((cRBoard>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(6, i%8-1, 7, i%8, 'q');
-                    moves[movesIndex++] = encodeMove(6, i%8-1, 7, i%8, 'r');
-                    moves[movesIndex++] = encodeMove(6, i%8-1, 7, i%8, 'b');
-                    moves[movesIndex++] = encodeMove(6, i%8-1, 7, i%8, 'k');
+                    moves[movesIndex++] = Moves.encodeMove(6, i%8-1, 7, i%8, 'q');
+                    moves[movesIndex++] = Moves.encodeMove(6, i%8-1, 7, i%8, 'r');
+                    moves[movesIndex++] = Moves.encodeMove(6, i%8-1, 7, i%8, 'b');
+                    moves[movesIndex++] = Moves.encodeMove(6, i%8-1, 7, i%8, 'k');
                 }
                 if(((cLBoard>>i) & 1) == 1) { //if this is a one, we've found a move
-                    moves[movesIndex++] = encodeMove(6, i%8+1, 7, i%8, 'q');
-                    moves[movesIndex++] = encodeMove(6, i%8+1, 7, i%8, 'r');
-                    moves[movesIndex++] = encodeMove(6, i%8+1, 7, i%8, 'b');
-                    moves[movesIndex++] = encodeMove(6, i%8+1, 7, i%8, 'k');
+                    moves[movesIndex++] = Moves.encodeMove(6, i%8+1, 7, i%8, 'q');
+                    moves[movesIndex++] = Moves.encodeMove(6, i%8+1, 7, i%8, 'r');
+                    moves[movesIndex++] = Moves.encodeMove(6, i%8+1, 7, i%8, 'b');
+                    moves[movesIndex++] = Moves.encodeMove(6, i%8+1, 7, i%8, 'k');
                 }
             }
             

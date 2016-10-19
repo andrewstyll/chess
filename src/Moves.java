@@ -1,3 +1,4 @@
+package src;
 import java.util.*;
 import pieceDef.*;
 // what is the purpose of the move class....
@@ -54,6 +55,38 @@ public class Moves {
                 chessPiece.popMove();
             }
         }
+    }
+    
+    public static int encodeMove(int y1, int x1, int y2, int x2, char promote) {
+        int move = 0;
+        move = (x1) | (y1<<4) | (x2<<8) | (y2<<12);
+        switch(promote) {
+            case 'R':
+                move = move | 1<<16;
+                break;
+            case 'K':
+                move = move | 1<<17;
+                break;
+            case 'B':
+                move = move | 1<<18;
+                break;
+            case 'Q':
+                move = move | 1<<19;
+                break;
+            case 'r':
+                move = move | 1<<20;
+                break;
+            case 'k':
+                move = move | 1<<21;
+                break;
+            case 'b':
+                move = move | 1<<22;
+                break;
+            case 'q':
+                move = move | 1<<23;
+                break;
+        }
+        return move;
     }
 
     private static int decodeMove(int move, int step) {
