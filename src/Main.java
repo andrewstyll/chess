@@ -53,8 +53,10 @@ public class Main {
 
         if(botIsWhite == 1) {
             System.out.println("3"); 
-            MAS = AlphaBeta.maxAlphaBeta(infNeg, inf, 0, true, 0);
+            MAS = AlphaBeta.maxAlphaBeta(infNeg, inf, 0, false, 0);
             //now make the move here
+            Moves.makeMoveAllPieces(decodeMASMove(MAS), true);
+            //TODO::LOCATION IS BUGGED UPON MAKING A MOVE
             //System.out.println("final score = " + decodeMASScore(MAS));
             window.repaint();
         }

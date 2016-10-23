@@ -32,7 +32,7 @@ class AlphaBeta {
         for(int i = 0; i < Moves.MAX_MOVES; i++) {
             if(moves[i] != 0) {
                 
-                Moves.makeMoveAllPieces(moves[i]); // I have to make a move in order to get the score 
+                Moves.makeMoveAllPieces(moves[i], false); // I have to make a move in order to get the score 
                 MAS = minAlphaBeta(alpha, beta, depth+1, !whitesMove, moves[i]);
                 score = Main.decodeMASScore(MAS);
                 Moves.undoMoveAllPieces();
@@ -81,7 +81,7 @@ class AlphaBeta {
         for(int i = 0; i < Moves.MAX_MOVES; i++) {
             if(moves[i] != 0) {
                 
-                Moves.makeMoveAllPieces(moves[i]); // I have to make a move in order to get the score
+                Moves.makeMoveAllPieces(moves[i], false); // I have to make a move in order to get the score
                 MAS = maxAlphaBeta(alpha, beta, depth+1, !whitesMove, moves[i]);
                 score = Main.decodeMASScore(MAS);
                 Moves.undoMoveAllPieces();

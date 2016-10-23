@@ -1,4 +1,5 @@
 package src;
+
 import java.util.*;
 import pieceDef.*;
 // what is the purpose of the move class....
@@ -115,7 +116,7 @@ public class Moves {
     //makes a move based on encoded input
     public static long makeMove(int move, long location, int promo) {
         int startLocation = 0, endLocation = 0;
-        long base = 0L, returnBoard = 0L; //with a return board, the move doesn't get saved unless i want it to
+        long base = 0L, returnBoard = 0L, newLocation = 0L; //with a return board, the move doesn't get saved unless i want it to
 
         if(decodeMove(move, 3) == 0) { //regular move
             startLocation = decodeMove(move, 1); //starting location on grid
@@ -134,9 +135,9 @@ public class Moves {
         
         if(((location>>startLocation)&1) == 1) { //remove piece existing on board (only true for correct board)
             base = Main.powerOf2(startLocation);
-            returnBoard = location & ~base;
-            base = Main.powerOf2(endLocation);
-            returnBoard = location | base;
+            newLocation = location & ~base; //return board = location minus the moved piece
+            base = Main.powerOf2(endLocation); //the is the new location of the moved piece
+            returnBoard = newLocation | base;
         } else { //remove deleted piece wherever it exists
             base = Main.powerOf2(endLocation);
             returnBoard = location & ~base;
@@ -145,7 +146,7 @@ public class Moves {
         return returnBoard;
     }
  
-    public static void makeMoveAllPieces(int move) {
+    public static void makeMoveAllPieces(int move, boolean updateLocation) {
         HashMap<Character, Piece> pieces = Board.getPieces();
         int promo;
         long newLocation, board = 0L;
@@ -155,10 +156,18 @@ public class Moves {
             Piece chessPiece = entry.getValue();
             promo = determinePromo(key); 
             newLocation = makeMove(move, chessPiece.getLocation(), promo);
-            chessPiece.pushMove(newLocation);
-        
+            
+            if(!updateLocation) {
+                chessPiece.pushMove(newLocation);
+            } else {
+                chessPiece.setLocation(newLocation);
+            }
             //for display and test purposes
             board |= newLocation;
+        }
+        if(updateLocation) {
+            System.out.println(Integer.toHexString(move));
+            Board.drawBoard(board);
         }
     }
    

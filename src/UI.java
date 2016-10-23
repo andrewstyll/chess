@@ -38,7 +38,7 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
             Piece chessPiece = entry.getValue();
 
             long location = chessPiece.getLocation();
-            
+            System.out.println("Key: " + key + " location: " + location);            
             int j = -1, k = -1;
             for(int i = 0; i < 64; i++) {
                 if(((location>>i) & 1) == 1) {

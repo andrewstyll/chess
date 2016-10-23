@@ -69,38 +69,6 @@ public abstract class Piece {
         return (diag&diagonalMask[index%8 + index/8])|(antiDiag&antiDiagonalMask[index/8 - index%8 + 7]);
     }
     
-/*    public int encodeMove(int y1, int x1, int y2, int x2, char promote) {
-        int move = 0;
-        move = (x1) | (y1<<4) | (x2<<8) | (y2<<12);
-        switch(promote) {
-            case 'R':
-                move = move | 1<<16;
-                break;
-            case 'K':
-                move = move | 1<<17;
-                break;
-            case 'B':
-                move = move | 1<<18;
-                break;
-            case 'Q':
-                move = move | 1<<19;
-                break;
-            case 'r':
-                move = move | 1<<20;
-                break;
-            case 'k':
-                move = move | 1<<21;
-                break;
-            case 'b':
-                move = move | 1<<22;
-                break;
-            case 'q':
-                move = move | 1<<23;
-                break;
-        }
-        return move;
-    }*/
-    
     //return either the default location of the piece if the stack is empty, or the most recent "current" location
     public long getLocation() {
         if(moveHistoryEmpty()) {
@@ -112,6 +80,10 @@ public abstract class Piece {
 
     public void addLocation(long l) {
         location += l;
+    }
+
+    public void setLocation(long l) {
+        location = l;
     }
 
     public Side getSide() {
