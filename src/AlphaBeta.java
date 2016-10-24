@@ -18,9 +18,8 @@ class AlphaBeta {
         }
         
         if(depth == MAX_DEPTH) {
-            MAS = Main.encodeMAS(move, Rating.evaluate(moves, whitesMove, depth));
+            MAS = Moves.encodeMAS(move, Rating.evaluate(moves, whitesMove, depth));
             return MAS;
-            //return Rating.evaluate(moves, whitesMove, depth);
         }
 
         //we've hit a checkmate
@@ -34,17 +33,16 @@ class AlphaBeta {
                 
                 Moves.makeMoveAllPieces(moves[i], false); // I have to make a move in order to get the score 
                 MAS = minAlphaBeta(alpha, beta, depth+1, !whitesMove, moves[i]);
-                score = Main.decodeMASScore(MAS);
+                score = Moves.decodeMASScore(MAS);
                 Moves.undoMoveAllPieces();
                 
                 if(score >= beta) {
-                    MAS = Main.encodeMAS(moves[i], beta);
+                    MAS = Moves.encodeMAS(moves[i], beta);
                     return MAS;
-                    //return beta;
                 }
                 if(score > alpha) {
                     alpha = score;
-                    MAS = Main.encodeMAS(moves[i], alpha);
+                    MAS = Moves.encodeMAS(moves[i], alpha);
                 }
             } else {
                 break;
@@ -52,7 +50,6 @@ class AlphaBeta {
         }
         //MAS has already stored the alpha above in the for loop along with its corresponding move
         return MAS;
-        //return alpha;
     }
 
     static int[] minAlphaBeta(int alpha, int beta, int depth, boolean whitesMove, int move) {
@@ -67,9 +64,8 @@ class AlphaBeta {
         }
         
         if(depth == MAX_DEPTH) {
-            MAS = Main.encodeMAS(move, Rating.evaluate(moves, whitesMove, depth));
+            MAS = Moves.encodeMAS(move, Rating.evaluate(moves, whitesMove, depth));
             return MAS;
-            //return Rating.evaluate(moves, whitesMove, depth);
         }
 
         //we've hit a checkmate
@@ -83,17 +79,16 @@ class AlphaBeta {
                 
                 Moves.makeMoveAllPieces(moves[i], false); // I have to make a move in order to get the score
                 MAS = maxAlphaBeta(alpha, beta, depth+1, !whitesMove, moves[i]);
-                score = Main.decodeMASScore(MAS);
+                score = Moves.decodeMASScore(MAS);
                 Moves.undoMoveAllPieces();
                 
                 if(score <= alpha) {
-                    MAS = Main.encodeMAS(moves[i], alpha);
+                    MAS = Moves.encodeMAS(moves[i], alpha);
                     return MAS;
-                    //return alpha;
                 }
                 if(score < beta) {
                     beta = score;
-                    MAS = Main.encodeMAS(moves[i], beta);
+                    MAS = Moves.encodeMAS(moves[i], beta);
                 }
             } else {
                 break;
@@ -101,7 +96,6 @@ class AlphaBeta {
         }
         //MAS has already stored the beta above in the for loop along with its corresponding move
         return MAS;
-        //return beta;
     }
 
 /**

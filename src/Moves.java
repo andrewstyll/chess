@@ -10,8 +10,23 @@ import pieceDef.*;
 
 public class Moves {
 
-    static int MAX_MOVES = 218; //this is supposed to be the maximum number of moves for any position
+    public static int MAX_MOVES = 218; //this is supposed to be the maximum number of moves for any position
 
+    public static int[] encodeMAS(int move, int score) {
+        int[] MAS = new int[2];
+        MAS[0] = move;
+        MAS[1] = score;
+        return MAS;
+    }
+
+    public static int decodeMASMove(int[] MAS) {
+        return MAS[0];
+    }
+   
+    public static int decodeMASScore(int[] MAS) {
+        return MAS[1];
+    }
+    
     public static int getNumMoves(int[] moves) {
         int numMoves = 0;
         for(int i = 0; i < MAX_MOVES; i++) {
@@ -166,7 +181,6 @@ public class Moves {
             board |= newLocation;
         }
         if(updateLocation) {
-            System.out.println(Integer.toHexString(move));
             Board.drawBoard(board);
         }
     }
