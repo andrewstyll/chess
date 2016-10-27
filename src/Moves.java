@@ -12,6 +12,17 @@ public class Moves {
 
     public static int MAX_MOVES = 218; //this is supposed to be the maximum number of moves for any position
 
+    public static boolean containsMove(int[] moves, int move) {
+        for(int m : moves) {
+            if(m == move) {
+                return true;
+            } else if(m == 0) {
+                break;
+            }
+        }
+        return false;
+    }
+
     public static int[] encodeMAS(int move, int score) {
         int[] MAS = new int[2];
         MAS[0] = move;

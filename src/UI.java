@@ -109,7 +109,7 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
 
                 //did i move a pawn??
                 if( mouseY2 == 0 && mouseY1 == 1 /*insert check to see if i moved a pawn here*/ ) {
-                    if(Main.botIsWhite == 1) { //is the bot black or white??
+                    if(Main.botIsWhite) { //is the bot black or white??
                         //these are all assuming queen promotion, we can let the user choose here
                         move = Moves.encodeMove(mouseY1, mouseX1, mouseY2, mouseX2, 'q');
                     } else {
@@ -120,22 +120,20 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
                     move = Moves.encodeMove(mouseY1, mouseX1, mouseY2, mouseX2, ' ');
                     System.out.println(Integer.toHexString(move));
                 }
-                if(Main.botIsWhite == 1) {
-                    moves = Moves.possibleMovesBlack(false);
+                if(Main.botIsWhite) {
+                    moves = Moves.possibleMovesBlack(Main.botIsWhite);
                 } else {
-                    moves = Moves.possibleMovesWhite(true);
+                    moves = Moves.possibleMovesWhite(Main.botIsWhite);
                 }
 
-                if(/*Arrays.asList(moves).contains(move)*/) { //THIS CHECK IS FAILING
+                if(Moves.containsMove(moves, move)) { 
                     int[] MAS = new int[2];
                     //if valid move make user move
-                    Moves.showMoves(moves);
                     Moves.makeMoveAllPieces(move, true);
-                    //TODO::move side based on bot is white or not
                     //make the Bot move
-                    /*MAS = AlphaBeta.maxAlphaBeta(Main.infNeg, Main.inf, 0, false, 0);
+                    MAS = AlphaBeta.maxAlphaBeta(Main.infNeg, Main.inf, 0, Main.botIsWhite, 0);
                     //now make the move here
-                    Moves.makeMoveAllPieces(Moves.decodeMASMove(MAS), true);*/
+                    Moves.makeMoveAllPieces(Moves.decodeMASMove(MAS), true);
                     this.repaint();
                 }
             }

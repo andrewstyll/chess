@@ -3,7 +3,7 @@ import java.util.*;
 
 class AlphaBeta {
      
-    static int MAX_DEPTH = 4;
+    static int MAX_DEPTH = 3;
   
     //beta = must be at least this good, alpha means too good. Use hard cut
     static int[] maxAlphaBeta(int alpha, int beta, int depth, boolean whitesMove, int move) {
@@ -12,7 +12,7 @@ class AlphaBeta {
         int[] moves = new int[Moves.MAX_MOVES];   
 
         if(whitesMove) { //if it's whites turn get white moves
-            moves = Moves.possibleMovesWhite(whitesMove);    
+            moves = Moves.possibleMovesWhite(whitesMove);
         } else {
             moves = Moves.possibleMovesBlack(whitesMove);    
         }
@@ -28,6 +28,7 @@ class AlphaBeta {
             return whitesMove == true ? Main.CHECK_MATE : (-1)*Main.CHECK_MATE;
         }*/
 
+        Moves.showMoves(moves);
         for(int i = 0; i < Moves.MAX_MOVES; i++) {
             if(moves[i] != 0) {
                 
@@ -37,12 +38,12 @@ class AlphaBeta {
                 Moves.undoMoveAllPieces();
                 
                 if(score >= beta) {
-                    MAS = Moves.encodeMAS(moves[i], beta);
+                    MAS = Moves.encodeMAS(move, beta);
                     return MAS;
                 }
                 if(score > alpha) {
                     alpha = score;
-                    MAS = Moves.encodeMAS(moves[i], alpha);
+                    MAS = Moves.encodeMAS(move, alpha);
                 }
             } else {
                 break;
@@ -64,6 +65,7 @@ class AlphaBeta {
         }
         
         if(depth == MAX_DEPTH) {
+            //System.out.println(depth);
             MAS = Moves.encodeMAS(move, Rating.evaluate(moves, whitesMove, depth));
             return MAS;
         }
@@ -83,12 +85,12 @@ class AlphaBeta {
                 Moves.undoMoveAllPieces();
                 
                 if(score <= alpha) {
-                    MAS = Moves.encodeMAS(moves[i], alpha);
+                    MAS = Moves.encodeMAS(move, alpha);
                     return MAS;
                 }
                 if(score < beta) {
                     beta = score;
-                    MAS = Moves.encodeMAS(moves[i], beta);
+                    MAS = Moves.encodeMAS(move, beta);
                 }
             } else {
                 break;
