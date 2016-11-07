@@ -1,6 +1,10 @@
 package src;
 import java.util.*;
 
+/*
+ * This class holds the positional rating board for all pieces.
+ */
+
 class RatingBoard {
     
     static int pBoardW[][]={

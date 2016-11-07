@@ -1,6 +1,10 @@
 package pieceDef;
 import java.util.*;
 
+/*
+ *  Abstract class to serve as base class for all pieces. 
+ */
+
 public abstract class Piece {
     public enum Side{BLACK, WHITE};
    
@@ -35,6 +39,7 @@ public abstract class Piece {
     };
 
     //so given a position and occupied spaces grid...
+    //used to calcuate the potential vertical/horizontal moves of a piece (bishop and queen)
     protected long verticalHorizontalHQ(long occupied, int index) { //take in the index of the square(so like 0->63)
         long left, right, vertical, horizontal;
 
@@ -52,6 +57,7 @@ public abstract class Piece {
         return (vertical&verticalMask[index%8])|(horizontal&horizontalMask[index/8]);
     }
 
+    //used to calcuate the potential diagonal moves of a piece (bishop and queen)
     protected long diagonalAntiDiagonalHQ(long occupied, int index) {
         long left, right, diag, antiDiag;
 
@@ -78,14 +84,17 @@ public abstract class Piece {
         }
     }
 
+    //add a location to the pieces location (used during initialisation of pieces)
     public void addLocation(long l) {
         location += l;
     }
 
+    //set the location
     public void setLocation(long l) {
         location = l;
     }
 
+    //get the pieces side (White or black??)
     public Side getSide() {
         return team;
     }
@@ -102,10 +111,12 @@ public abstract class Piece {
         return count;
     }
 
+    //are ther any new locations stored on the locations stack??
     public boolean moveHistoryEmpty() {
         return moveHistory.empty();
     }
 
+    //push a location onto the move history stack
     public void pushMove(long move) {
         moveHistory.push(move);
     }

@@ -7,6 +7,10 @@ import javax.swing.*;
 import java.util.*;
 import pieceDef.*;
 
+/*
+ * This class stores the UI for which the game is played. UI is written in swing.
+ */
+
 public class UI extends JPanel implements MouseListener, MouseMotionListener {
     
     static int mouseX1, mouseY1, mouseX2, mouseY2;
@@ -89,7 +93,6 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
         if( xLocation < 8 && yLocation < 8 ) {
             mouseX1 = xLocation;
             mouseY1 = yLocation;
-            System.out.println("x: " + mouseX1 + " y: " + mouseY1);
             this.repaint();
         }
     }
@@ -118,7 +121,6 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
                 } else {
                     //y2x2y1x1
                     move = Moves.encodeMove(mouseY1, mouseX1, mouseY2, mouseX2, ' ');
-                    System.out.println(Integer.toHexString(move));
                 }
                 if(Main.botIsWhite) {
                     moves = Moves.possibleMovesBlack(Main.botIsWhite);
@@ -131,6 +133,7 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
                     //if valid move make user move
                     Moves.makeMoveAllPieces(move, true);
                     //make the Bot move
+                    System.out.println("thinking......");
                     MAS = AlphaBeta.maxAlphaBeta(Main.infNeg, Main.inf, 0, Main.botIsWhite, 0);
                     //now make the move here
                     Moves.makeMoveAllPieces(Moves.decodeMASMove(MAS), true);

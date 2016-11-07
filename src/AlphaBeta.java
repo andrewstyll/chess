@@ -3,7 +3,7 @@ import java.util.*;
 
 class AlphaBeta {
      
-    static int MAX_DEPTH = 3;
+    static int MAX_DEPTH = 5;
   
     //beta = must be at least this good, alpha means too good. Use hard cut
     static int[] maxAlphaBeta(int alpha, int beta, int depth, boolean whitesMove, int move) {
@@ -18,17 +18,19 @@ class AlphaBeta {
         }
         
         if(depth == MAX_DEPTH) {
+            //System.out.println("rating: " + Rating.evaluate(moves, whitesMove, depth)+ " move: " + Integer.toHexString(move));
             MAS = Moves.encodeMAS(move, Rating.evaluate(moves, whitesMove, depth));
             return MAS;
         }
 
         //we've hit a checkmate
-        /*if(moves[0] == 0) {
+        if(moves[0] == 0) {
             //that means no moves were ever initialised so this must be a checkmate
-            return whitesMove == true ? Main.CHECK_MATE : (-1)*Main.CHECK_MATE;
-        }*/
+            int outScore = whitesMove == true ? Main.CHECK_MATE : (-1)*Main.CHECK_MATE;
+            MAS = Moves.encodeMAS(move, outScore);
+            return MAS;
+        }
 
-        Moves.showMoves(moves);
         for(int i = 0; i < Moves.MAX_MOVES; i++) {
             if(moves[i] != 0) {
                 
@@ -66,15 +68,18 @@ class AlphaBeta {
         
         if(depth == MAX_DEPTH) {
             //System.out.println(depth);
+            //System.out.println("rating: " + Rating.evaluate(moves, whitesMove, depth) + " move: " + Integer.toHexString(move));
             MAS = Moves.encodeMAS(move, Rating.evaluate(moves, whitesMove, depth));
             return MAS;
         }
 
         //we've hit a checkmate
-        /*if(moves[0] == 0) {
+        if(moves[0] == 0) {
             //that means no moves were ever initialised so this must be a checkmate
-            return whitesMove == true ? Main.CHECK_MATE : (-1)*Main.CHECK_MATE;
-        }*/
+            int outScore = whitesMove == true ? Main.CHECK_MATE : (-1)*Main.CHECK_MATE;
+            MAS = Moves.encodeMAS(move, outScore);
+            return MAS;
+        }
 
         for(int i = 0; i < Moves.MAX_MOVES; i++) {
             if(moves[i] != 0) {

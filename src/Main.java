@@ -21,9 +21,11 @@ public class Main {
     }
     
     public static void main(String[] args) {
-
+        
+        //initialise the board
         Board.initBoard();
         
+        //build the window for the game to live in
         ImageIcon icon = new ImageIcon("Assets/Icon.png");
 
         JFrame window = new JFrame("ChessBot-1");
@@ -33,16 +35,16 @@ public class Main {
         window.add(ui);
         window.setVisible(true);
         
+        //option window for who is playing what role
         Object[] option = {"You", "Bot"};
         int val = JOptionPane.showOptionDialog(null, "Who will be playing as white?", "ChessBot-1", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon, option, option[0]);
         botIsWhite = (val == 1) ? true : false;
         
         int[] MAS = new int[2];
 
-        
-        //botIsWhite = true;
+        //if the bot is white let it go first. This will make the bots first move
         if(botIsWhite) {
-            //System.out.println("3"); 
+            System.out.println("thinking......");
             MAS = AlphaBeta.maxAlphaBeta(infNeg, inf, 0, botIsWhite, 0);
             System.out.println(Integer.toHexString(Moves.decodeMASMove(MAS)));
             Moves.makeMoveAllPieces(Moves.decodeMASMove(MAS), true);
