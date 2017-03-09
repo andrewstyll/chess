@@ -40,7 +40,7 @@ public class King extends Piece {
 
     public int[] getMoves(long piecesB, long piecesW) {
         
-        int[] moves = new int[218];
+        int[] moves = new int[8];
         int movesIndex = 0;
 
         long allPieces = piecesB | piecesW;

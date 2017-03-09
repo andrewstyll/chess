@@ -133,8 +133,10 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
                     //if valid move make user move
                     Moves.makeMoveAllPieces(move, true);
                     //make the Bot move
+                    //this.repaint();
                     System.out.println("thinking......");
                     MAS = AlphaBeta.maxAlphaBeta(Main.infNeg, Main.inf, 0, Main.botIsWhite, 0);
+                    System.out.println("Move: " + Moves.decodeMASMove(MAS) + " " + Integer.toHexString(Moves.decodeMASMove(MAS)) + " Score: " + Moves.decodeMASScore(MAS));
                     //now make the move here
                     Moves.makeMoveAllPieces(Moves.decodeMASMove(MAS), true);
                     this.repaint();

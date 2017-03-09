@@ -46,7 +46,8 @@ public class Main {
         if(botIsWhite) {
             System.out.println("thinking......");
             MAS = AlphaBeta.maxAlphaBeta(infNeg, inf, 0, botIsWhite, 0);
-            System.out.println(Integer.toHexString(Moves.decodeMASMove(MAS)));
+            System.out.println("Move Score is : " + Moves.decodeMASScore(MAS));
+            //System.out.println(Integer.toHexString(Moves.decodeMASMove(MAS)));
             Moves.makeMoveAllPieces(Moves.decodeMASMove(MAS), true);
             window.repaint();
         }

@@ -45,51 +45,52 @@ public class Moves {
     //only add to the array if the move will be safe for each colour's king
     private static int[] compileMoves(int[] p, int[] r, int[] k, int[] b, int[] q, int[] a, boolean whitesMove) {
         
-        int[] moves = new int[MAX_MOVES];
+        int[] tmpMoves = new int[MAX_MOVES];
         int pI = 0, rI = 0, kI = 0, bI = 0, qI = 0, aI = 0;
-        
-        for(int i = 0; i < MAX_MOVES; i++) {
-            if(moves[i] != 0) {
+        int i;
+
+        for(i = 0; i < MAX_MOVES; i++) {
+            if(tmpMoves[i] != 0) {
                 continue;
             }
             if (p[pI] != 0 && pI < MAX_MOVES) {
                 if(kingSafety(p[pI], whitesMove)) {
-                    moves[i] = p[pI++];
+                    tmpMoves[i] = p[pI++];
                 } else {
                     pI++; //we want to skip this move cause it isn't valid
                     i--;
                 }
             } else if (r[rI] != 0 && rI < MAX_MOVES) {
                 if(kingSafety(r[rI], whitesMove)) {
-                    moves[i] = r[rI++];
+                    tmpMoves[i] = r[rI++];
                 } else {
                     rI++; //we want to skip this move cause it isn't valid
                     i--;
                 }
             } else if (k[kI] != 0  && kI < MAX_MOVES) {
                 if(kingSafety(k[kI], whitesMove)) {
-                    moves[i] = k[kI++];
+                    tmpMoves[i] = k[kI++];
                 } else {
                     kI++; //we want to skip this move cause it isn't valid
                     i--;
                 }
             } else if (b[bI] != 0 && bI < MAX_MOVES) {
                 if(kingSafety(b[bI], whitesMove)) {
-                    moves[i] = b[bI++];
+                    tmpMoves[i] = b[bI++];
                 } else {
                     bI++; //we want to skip this move cause it isn't valid
                     i--;
                 }
             } else if (q[qI] != 0 && qI < MAX_MOVES) {
                 if(kingSafety(q[qI], whitesMove)) {
-                    moves[i] = q[qI++];
+                    tmpMoves[i] = q[qI++];
                 } else {
                     qI++; //we want to skip this move cause it isn't valid
                     i--;
                 }
             } else if (a[aI] != 0 && aI < MAX_MOVES) {
                 if(kingSafety(a[aI], whitesMove)) {
-                    moves[i] = a[aI++];
+                    tmpMoves[i] = a[aI++];
                 } else {
                     aI++; //we want to skip this move cause it isn't valid
                     i--;
@@ -98,6 +99,7 @@ public class Moves {
                 break;
             }
         }
+        int[] moves = Arrays.copyOfRange(tmpMoves, 0, i);
         return moves;
     }
 
@@ -210,7 +212,7 @@ public class Moves {
     //returns the number of moves in the array of moves (I wonder if in java using a string would be faster O_o)
     public static int getNumMoves(int[] moves) {
         int numMoves = 0;
-        for(int i = 0; i < MAX_MOVES; i++) {
+        for(int i = 0; i < moves.length; i++) {
             if(moves[i] == 0) {
                 break;
             } else {
@@ -399,12 +401,12 @@ public class Moves {
 
         HashMap<Character, Piece> pieces = Board.getPieces();
 
-        int[] pawnMoves = new int[MAX_MOVES];
-        int[] rookMoves = new int[MAX_MOVES];
-        int[] knightMoves = new int[MAX_MOVES];
-        int[] bishopMoves = new int[MAX_MOVES];
-        int[] queenMoves = new int[MAX_MOVES];
-        int[] kingMoves = new int[MAX_MOVES];
+        int[] pawnMoves;
+        int[] rookMoves;
+        int[] knightMoves;
+        int[] bishopMoves;
+        int[] queenMoves;
+        int[] kingMoves;
 
         long piecesB = getBlackPosition(pieces);
         long piecesW = getWhitePosition(pieces);
@@ -424,12 +426,12 @@ public class Moves {
 
         HashMap<Character, Piece> pieces = Board.getPieces();
         
-        int[] pawnMoves = new int[MAX_MOVES];
-        int[] rookMoves = new int[MAX_MOVES];
-        int[] knightMoves = new int[MAX_MOVES];
-        int[] bishopMoves = new int[MAX_MOVES];
-        int[] queenMoves = new int[MAX_MOVES];
-        int[] kingMoves = new int[MAX_MOVES];
+        int[] pawnMoves;
+        int[] rookMoves;
+        int[] knightMoves;
+        int[] bishopMoves;
+        int[] queenMoves;
+        int[] kingMoves;
         
         long piecesB = getBlackPosition(pieces);
         long piecesW = getWhitePosition(pieces);
