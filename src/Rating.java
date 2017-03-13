@@ -21,7 +21,6 @@ public class Rating {
 
         wUnsafeBoard = Moves.getUnsafeBoard(0, true);
         bUnsafeBoard = Moves.getUnsafeBoard(0, false);
-    
 
         for(Map.Entry<Character, Piece> entry : pieces.entrySet()) {
             char key = entry.getKey();
@@ -70,22 +69,22 @@ public class Rating {
                             if(((board>>i) & 1) == 1) {
                                 switch(key) {
                                     case 'p':
-                                        pointCount -= 64;        
+                                        pointCount += 64;        
                                         break;
                                     case 'r':
-                                        pointCount -= 500;      
+                                        pointCount += 500;      
                                         break;
                                     case 'k':
-                                        pointCount -= 300;       
+                                        pointCount += 300;       
                                         break;
                                     case 'b':
-                                        pointCount -= 300;       
+                                        pointCount += 300;       
                                         break;
                                     case 'q':
-                                        pointCount -= 900;        
+                                        pointCount += 900;        
                                         break;
                                     case 'a':
-                                        pointCount -= 200;        
+                                        pointCount += 200;        
                                         break;
                                 }
                             }
@@ -144,11 +143,11 @@ public class Rating {
         return pointCount;
     }
     
-    public static int rateMoveOptions(int numMoves) {
+    public static int rateMoveOptions(int numMoves, int depth) {
         int pointCount = 0;
         pointCount += numMoves*5; //5 pointes per valid move
         if(numMoves == 0) { // if we're in check or somethign that's bad so minus a billion points
-            pointCount += (-1)*Main.CHECK_MATE;
+            pointCount += (-1)*Main.CHECK_MATE*depth;
         }
         return pointCount;
     }
@@ -228,17 +227,17 @@ public class Rating {
         if( ((hasQueenW && (!pRW && mPW < 2)) || (hasQueenB && (!pRB && mPB > 1))) || (!hasQueenW && !hasQueenB) ) {
             //END BOARD
             pointCount += RatingBoard.aEndBoardW[kingPositionW/8][kingPositionW%8]; //White
-            pointCount += Moves.getNumMoves(pieces.get('A').getMoves(piecesB, piecesW))*150;
+            pointCount += Moves.getNumMoves(pieces.get('A').getMoves(piecesB, piecesW))*30;
             
             pointCount -= RatingBoard.aEndBoardW[7-(kingPositionB/8)][7-(kingPositionB%8)];//Black
-            pointCount -= Moves.getNumMoves(pieces.get('a').getMoves(piecesB, piecesW))*150;
+            pointCount -= Moves.getNumMoves(pieces.get('a').getMoves(piecesB, piecesW))*30;
         } else {
             //MID BOARD
             pointCount += RatingBoard.aMidBoardW[kingPositionW/8][kingPositionW%8];            
-            pointCount += Moves.getNumMoves(pieces.get('A').getMoves(piecesB, piecesW))*50;
+            pointCount += Moves.getNumMoves(pieces.get('A').getMoves(piecesB, piecesW))*10;
 
             pointCount -= RatingBoard.aMidBoardW[7-(kingPositionB/8)][7-(kingPositionB%8)];
-            pointCount -= Moves.getNumMoves(pieces.get('a').getMoves(piecesB, piecesW))*50;
+            pointCount -= Moves.getNumMoves(pieces.get('a').getMoves(piecesB, piecesW))*10;
         }
         return pointCount;
     }
@@ -251,7 +250,7 @@ public class Rating {
         pointCount += rateBoardPosition();//most of this is working, check comments
         pointCount += rateBoardValue(); //WORKING
         pointCount += ratePieceSafeness(whitesMove); //done
-        pointCount += rateMoveOptions(Moves.getNumMoves(moves)); //pass in the number of moves in here
+        pointCount += rateMoveOptions(Moves.getNumMoves(moves), depth); //pass in the number of moves in here
         
         return whitesMove == true ? (pointCount+(50*depth)):((-1)*pointCount+(50*depth));
     }

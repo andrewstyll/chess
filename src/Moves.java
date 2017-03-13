@@ -48,47 +48,47 @@ public class Moves {
         int[] tmpMoves = new int[MAX_MOVES];
         int pI = 0, rI = 0, kI = 0, bI = 0, qI = 0, aI = 0;
         int i;
-
+        
         for(i = 0; i < MAX_MOVES; i++) {
             if(tmpMoves[i] != 0) {
                 continue;
             }
-            if (p[pI] != 0 && pI < MAX_MOVES) {
+            if(pI < p.length) {
                 if(kingSafety(p[pI], whitesMove)) {
                     tmpMoves[i] = p[pI++];
                 } else {
                     pI++; //we want to skip this move cause it isn't valid
                     i--;
                 }
-            } else if (r[rI] != 0 && rI < MAX_MOVES) {
+            } else if (rI < r.length) {
                 if(kingSafety(r[rI], whitesMove)) {
                     tmpMoves[i] = r[rI++];
                 } else {
                     rI++; //we want to skip this move cause it isn't valid
                     i--;
                 }
-            } else if (k[kI] != 0  && kI < MAX_MOVES) {
+            } else if (kI < k.length) {
                 if(kingSafety(k[kI], whitesMove)) {
                     tmpMoves[i] = k[kI++];
                 } else {
                     kI++; //we want to skip this move cause it isn't valid
                     i--;
                 }
-            } else if (b[bI] != 0 && bI < MAX_MOVES) {
+            } else if (bI < b.length) {
                 if(kingSafety(b[bI], whitesMove)) {
                     tmpMoves[i] = b[bI++];
                 } else {
                     bI++; //we want to skip this move cause it isn't valid
                     i--;
                 }
-            } else if (q[qI] != 0 && qI < MAX_MOVES) {
+            } else if (qI < q.length) {
                 if(kingSafety(q[qI], whitesMove)) {
                     tmpMoves[i] = q[qI++];
                 } else {
                     qI++; //we want to skip this move cause it isn't valid
                     i--;
                 }
-            } else if (a[aI] != 0 && aI < MAX_MOVES) {
+            } else if (aI < a.length) {
                 if(kingSafety(a[aI], whitesMove)) {
                     tmpMoves[i] = a[aI++];
                 } else {
@@ -145,18 +145,23 @@ public class Moves {
     //false.
     private static boolean kingSafety(int move, boolean whitesMove) {
         HashMap<Character, Piece> pieces = Board.getPieces();
+         
+        //This make the move and check king safety
+        makeMoveAllPieces(move, false);   
         long unsafeBoard = getUnsafeBoard(move, whitesMove);
-        Piece kingW = pieces.get('A');
-        Piece kingB = pieces.get('a');
+        long kingWLocation = pieces.get('A').getLocation();
+        long kingBLocation = pieces.get('a').getLocation();
+        undoMoveAllPieces();
+
         if(whitesMove) {
             //if it's whites move, check the black pieces with whites board
-            if((unsafeBoard & kingW.getLocation()) == 0) {
+            if((unsafeBoard & kingWLocation) == 0) {
                 return true;
             } else {
                 return false;
             }
         } else {
-            if((unsafeBoard & kingB.getLocation()) == 0) {
+            if((unsafeBoard & kingBLocation) == 0) {
                 return true;
             } else {
                 return false;
@@ -164,19 +169,20 @@ public class Moves {
         }
     }
 
-    private static void showMoves(int[] moves) {
-        for(int i = 0; i < MAX_MOVES; i++) {
+
+/*---------------------------------------
+ * PUBLIC FUNCTIONS
+ * --------------------------------------
+*/
+    
+    public static void showMoves(int[] moves) {
+        for(int i = 0; i < moves.length; i++) {
             if(moves[i] != 0) {
                 System.out.print(Integer.toHexString(moves[i]) + " ");
             }
         }
         System.out.println("");
     }
-
-/*---------------------------------------
- * PUBLIC FUNCTIONS
- * --------------------------------------
-*/
 
     //check to see if a move exists in the array of moves
     public static boolean containsMove(int[] moves, int move) {
@@ -317,29 +323,33 @@ public class Moves {
             if(!updateLocation) {
                 chessPiece.pushMove(newLocation);
             } else {
+                
                 chessPiece.setLocation(newLocation);
             }
             //for display and test purposes
             board |= newLocation;
         }
         /*if(updateLocation) {
+            System.out.println("updateBoard");
             Board.drawBoard(board);
         }*/
     }
    
 
-    //upon being given a move and a turn, this function will make the move, then compile a board of all dangerous
-    //squares given that first move. If no move is given, then the unsafe locations are given given 
+    //upon being given a move and a turn, this function will return a board indicating all unsafe
+    //squares given that first move. If no move is given TODO::
     public static long getUnsafeBoard(int move, boolean whitesMove) {
         HashMap<Character, Piece> pieces = Board.getPieces();
         long unsafeBoard = 0L, tmpBoard = 0L;
         long wBoard = 0L, bBoard = 0L;
 
         //this part determines the new locations of each piece after a move and stores them all together
+        //The locations of all of the pieces are stored onto a master board by color
         for(Map.Entry<Character, Piece> entry : pieces.entrySet()) {
             char key = entry.getKey();
             Piece chessPiece = entry.getValue();
 
+            //move is 0 when there is no move to be made (when I'm looking for a positional rating)
             if(move == 0) {
                 tmpBoard = makeMove(move, chessPiece.getLocation(), determinePromo(key));
             } else {
@@ -417,7 +427,7 @@ public class Moves {
         bishopMoves = pieces.get('B').getMoves(piecesB, piecesW);
         queenMoves = pieces.get('Q').getMoves(piecesB, piecesW);
         kingMoves = pieces.get('A').getMoves(piecesB, piecesW);
-    
+   
         return compileMoves(pawnMoves, rookMoves, knightMoves, bishopMoves, queenMoves, kingMoves, whitesMove);
     }
     
@@ -442,7 +452,7 @@ public class Moves {
         bishopMoves = pieces.get('b').getMoves(piecesB, piecesW);
         queenMoves = pieces.get('q').getMoves(piecesB, piecesW);
         kingMoves = pieces.get('a').getMoves(piecesB, piecesW);
-
+        
         return compileMoves(pawnMoves, rookMoves, knightMoves, bishopMoves, queenMoves, kingMoves, whitesMove);
     }
 

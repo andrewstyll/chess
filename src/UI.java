@@ -109,9 +109,8 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
             mouseY2 = yLocation;
 
             if(e.getButton() == MouseEvent.BUTTON1) {
-
                 //did i move a pawn??
-                if( mouseY2 == 0 && mouseY1 == 1 /*insert check to see if i moved a pawn here*/ ) {
+                if( ((mouseY2 == 0 && mouseY1 == 1) || (mouseY2 == 7 && mouseY1 == 6))  && Board.pawnCheck(mouseX1, mouseY1, Main.botIsWhite) ) {
                     if(Main.botIsWhite) { //is the bot black or white??
                         //these are all assuming queen promotion, we can let the user choose here
                         move = Moves.encodeMove(mouseY1, mouseX1, mouseY2, mouseX2, 'q');
@@ -123,17 +122,18 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
                     move = Moves.encodeMove(mouseY1, mouseX1, mouseY2, mouseX2, ' ');
                 }
                 if(Main.botIsWhite) {
-                    moves = Moves.possibleMovesBlack(Main.botIsWhite);
+                    moves = Moves.possibleMovesBlack(!Main.botIsWhite);
                 } else {
-                    moves = Moves.possibleMovesWhite(Main.botIsWhite);
+                    //the bot is black so I want white moves
+                    moves = Moves.possibleMovesWhite(!Main.botIsWhite);
                 }
-
+                
                 if(Moves.containsMove(moves, move)) { 
                     int[] MAS = new int[2];
                     //if valid move make user move
+                    System.out.println("Making move......");
                     Moves.makeMoveAllPieces(move, true);
                     //make the Bot move
-                    //this.repaint();
                     System.out.println("thinking......");
                     MAS = AlphaBeta.maxAlphaBeta(Main.infNeg, Main.inf, 0, Main.botIsWhite, 0);
                     System.out.println("Move: " + Moves.decodeMASMove(MAS) + " " + Integer.toHexString(Moves.decodeMASMove(MAS)) + " Score: " + Moves.decodeMASScore(MAS));

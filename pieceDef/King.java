@@ -40,7 +40,8 @@ public class King extends Piece {
 
     public int[] getMoves(long piecesB, long piecesW) {
         
-        int[] moves = new int[8];
+        int[] tmpMoves = new int[218];
+        int[] moves;
         int movesIndex = 0;
 
         long allPieces = piecesB | piecesW;
@@ -52,10 +53,16 @@ public class King extends Piece {
                 kingMoves = getMoveBoard(piecesB, piecesW, (long)i);
                 for(int j = 0; j < 64; j++) {
                     if (((kingMoves>>j) & 1) == 1) { //we have found a king move!!
-                        moves[movesIndex++] = Moves.encodeMove(i/8, i%8, j/8, j%8, ' ');
+                        tmpMoves[movesIndex++] = Moves.encodeMove(i/8, i%8, j/8, j%8, ' ');
                     }
                 }
             }
+        }
+        if(movesIndex > 0) {
+            moves = Arrays.copyOfRange(tmpMoves, 0, movesIndex);
+        } else {
+            //there is nothing to copy
+            moves = Arrays.copyOfRange(tmpMoves, 0, 0);
         }
         return moves;
     }

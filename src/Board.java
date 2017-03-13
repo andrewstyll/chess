@@ -11,7 +11,7 @@ public class Board {
     private static HashMap<Character, Piece> pieces = new HashMap<Character, Piece>();
 
     //initialisation board
-    //WHITE IS THE CAPITALISED ONES
+    //WHITE ARE THE CAPITALISED ONES
     static char charBoard[][] = {
         {'r', 'k', 'b', 'q', 'a', 'b', 'k', 'r'},
         {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
@@ -22,6 +22,16 @@ public class Board {
         {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
         {'R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R'},
     };
+    /*static char charBoard[][] = {
+        {' ', ' ', ' ', 'r', 'a', 'b', ' ', ' '},
+        {' ', ' ', ' ', 'p', ' ', 'p', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', 'B', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', 'Q', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+    };*/
 
     //initialise the board and all the piece objects 
     public static void initBoard() {
@@ -107,6 +117,28 @@ public class Board {
         return pieces;
     }
 
+    public static boolean pawnCheck(int x, int y, boolean botIsWhite) {
+        int index = y*8 + x; 
+        long location = 0l;
+        long checkLocation = Main.powerOf2(index);
+
+        if(botIsWhite) {
+            location = getPieces().get('p').getLocation();        
+            if( (location & checkLocation) == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            location = getPieces().get('P').getLocation();        
+            if( (location & checkLocation) == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
     //for debug, draws the board and fills all the spaces with peices in them with the character K
     public static void drawBoard(long num) {
         char board[][] = new char[8][8];
@@ -121,6 +153,7 @@ public class Board {
         for(int i = 0; i < 8; i++) {
             System.out.println(Arrays.toString(board[i]));
         }
+        System.out.println("----------------");
     }
 
 }
