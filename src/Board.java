@@ -22,8 +22,10 @@ public class Board {
         {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
         {'R', 'K', 'B', 'Q', 'A', 'B', 'K', 'R'},
     };
+
+    //dummy board for testing
     /*static char charBoard[][] = {
-        {' ', ' ', ' ', 'r', 'a', 'b', ' ', ' '},
+        {' ', ' ', ' ', 'r', 'a', 'r', ' ', ' '},
         {' ', ' ', ' ', 'p', ' ', 'p', ' ', ' '},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -117,6 +119,7 @@ public class Board {
         return pieces;
     }
 
+    //checks to see if there is a pawn at the given location
     public static boolean pawnCheck(int x, int y, boolean botIsWhite) {
         int index = y*8 + x; 
         long location = 0l;

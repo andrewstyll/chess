@@ -15,19 +15,21 @@ public class Main {
 
     static boolean botIsWhite = false;
 
+    public static ImageIcon icon = new ImageIcon("Assets/Icon.png");
+
+
+    // returns the binary value of the argument
     static long powerOf2(int i) {
         long base = 1L;
         return (base << i);
     }
     
-    public static void main(String[] args) {
-        
+    // game start function
+    static void startGame() {
+
         //initialise the board
         Board.initBoard();
         
-        //build the window for the game to live in
-        ImageIcon icon = new ImageIcon("Assets/Icon.png");
-
         JFrame window = new JFrame("ChessBot-1");
         UI ui = new UI();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,10 +48,13 @@ public class Main {
         if(botIsWhite) {
             System.out.println("thinking......");
             MAS = AlphaBeta.maxAlphaBeta(infNeg, inf, 0, botIsWhite, 0);
-            System.out.println("Move Score is : " + Moves.decodeMASScore(MAS));
-            //System.out.println(Integer.toHexString(Moves.decodeMASMove(MAS)));
             Moves.makeMoveAllPieces(Moves.decodeMASMove(MAS), true);
             window.repaint();
         }
+        return;
+    }
+
+    public static void main(String[] args) {
+        startGame(); 
     }
 }

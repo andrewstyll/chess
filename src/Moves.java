@@ -337,7 +337,7 @@ public class Moves {
    
 
     //upon being given a move and a turn, this function will return a board indicating all unsafe
-    //squares given that first move. If no move is given TODO::
+    //squares given that first move. If no move is given we are just interested in a current board rating
     public static long getUnsafeBoard(int move, boolean whitesMove) {
         HashMap<Character, Piece> pieces = Board.getPieces();
         long unsafeBoard = 0L, tmpBoard = 0L;

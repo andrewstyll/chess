@@ -1,6 +1,16 @@
 package src;
 import java.util.*;
 
+/*
+ * Alpha Beta algorithm to determine the minimax value of the scored with a depth of 4 this algorithm allows for the
+ * pruning of a minimax tree so that time isn't wasted looking at moves that will not be chosen. This is done byu
+ * storing an alpha and a beta that store a closing range that eliminates extremely good/bad moves and helps us
+ * determine the middle ground move. This assumes that the player and the bot are of equal skill. Adjusting the depth
+ * causes the bot to search deeper to determine a more accurate end result of a move, however thsi come at the cost of
+ * time.
+ *
+ */
+
 class AlphaBeta {
      
     static int MAX_DEPTH = 4;
@@ -18,7 +28,6 @@ class AlphaBeta {
         }
         
         if(depth == MAX_DEPTH || moves.length == 0) {
-            //System.out.println("rating: " + Rating.evaluate(moves, whitesMove, depth)+ " move: " + Integer.toHexString(move));
             MAS = Moves.encodeMAS(move, Rating.evaluate(moves, whitesMove, depth));
             return MAS;
         }

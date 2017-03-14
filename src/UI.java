@@ -17,6 +17,18 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
     static int squareWidth = 64;
     static int xOffset = 20, yOffset = 18;
 
+    public void handleCheckMate(boolean botMated) {
+        String outMsg;
+        if (botMated) {
+            outMsg = "You beat the bot!";
+        } else {
+            outMsg = "You lost to the bot!";
+        }
+        Object[] option = {"exit"};
+        int val = JOptionPane.showOptionDialog(null, outMsg, "ChessBot-1", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, Main.icon, option, option[0]);   
+        System.exit(0);
+    }
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g); //allows for partial painting of a canvas
         this.setBackground(Color.LIGHT_GRAY);
@@ -98,6 +110,7 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
     }
 
     public void mouseReleased(MouseEvent e) {
+        
         int xLocation = (e.getX() - xOffset)/squareWidth;
         int yLocation = (e.getY() - yOffset)/squareWidth; 
 
@@ -124,21 +137,29 @@ public class UI extends JPanel implements MouseListener, MouseMotionListener {
                 if(Main.botIsWhite) {
                     moves = Moves.possibleMovesBlack(!Main.botIsWhite);
                 } else {
-                    //the bot is black so I want white moves
                     moves = Moves.possibleMovesWhite(!Main.botIsWhite);
                 }
                 
-                if(Moves.containsMove(moves, move)) { 
+                if(moves.length == 0) {
+                    handleCheckMate(false);
+
+                } else if(Moves.containsMove(moves, move)) { 
                     int[] MAS = new int[2];
-                    //if valid move make user move
-                    System.out.println("Making move......");
+                    
+                    System.out.println("Making move......"); // make user move
                     Moves.makeMoveAllPieces(move, true);
-                    //make the Bot move
-                    System.out.println("thinking......");
+            
+                    this.repaint();
+
+                    System.out.println("thinking......"); // get bot move
                     MAS = AlphaBeta.maxAlphaBeta(Main.infNeg, Main.inf, 0, Main.botIsWhite, 0);
-                    System.out.println("Move: " + Moves.decodeMASMove(MAS) + " " + Integer.toHexString(Moves.decodeMASMove(MAS)) + " Score: " + Moves.decodeMASScore(MAS));
-                    //now make the move here
-                    Moves.makeMoveAllPieces(Moves.decodeMASMove(MAS), true);
+                    int botMove = Moves.decodeMASMove(MAS);
+                    
+                    if(botMove == 0) {
+                        handleCheckMate(true);
+                    } else {
+                        Moves.makeMoveAllPieces(botMove, true);
+                    }
                     this.repaint();
                 }
             }
